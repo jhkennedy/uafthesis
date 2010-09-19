@@ -1,0 +1,771 @@
+How to make a UAF thesis using LaTeX.  In the misquoted words of Faith
+Rayfield, the wonderful UAF Grad School Thesis Checker, a thesis built
+using LaTeX in this way: "It looks...perfect.  Wow."  Now you can be
+cool, too.
+
+Much of this is due to previous work of:
+
+  Curt A. L. Szuberla   13 November 1996
+  Matt Heavner           5 February 1999
+  Dana Moudry           18 December 2002
+  Ryan Woodard           2 December 2004
+
+I, being the latest in the string of bored physics students, offer my
+services in case you run into problems.  Email me with questions and
+improvements.  Pass on any major improvements.  Spread the word.  Make
+this free and available to the world.
+
+In the future, if I receive any important updates to this package I
+will put all relevant items back in this directory.  So check back
+every ten years or so.
+
+   http://www.timehaven.org/public/uafthesis_latex/
+   ryan@timehaven.org
+
+*****************************************************************
+Table of Contents
+
+-2. Notes
+-1. Fast Track
+ 0. Overview
+ 1. Basics
+ 2. Document class
+ 3. External files
+ 4. Font
+ 5. Adding a chapter.
+ 6. Makefile
+ 7. Latex output
+ 8. Bibliography
+ 9. AGU Bibliography
+10. Cool renewcommand
+11. More chapters with figures
+12. Separate bibliography in each chapter
+13. One Appendix
+14. Multiple Appendices
+15. List of Other Materials
+16. Using gv to your advantage.
+
+*****************************************************************
+-2. Notes
+
+All that you will need to do your thesis is in the UAFTHESIS_LATEX/
+subdirectory.  Those files are:
+
+  billy:~write/UAFTHESIS_LATEX_TUTORIAL> ls UAFTHESIS_LATEX/
+  agu04.bst  ppl.sty  uafthesis2003.cls  uafthesis2004.cls  unsrtabbrv3.bst
+
+The exact same files are here in the main directory, but with the
+added `_TU'.  I only did that for testing purposes and did not feel
+like changing all of my files afterwards.  After using the tutorial,
+you only need these five files listed above.
+
+For example, below, where I have the line:
+
+  \documentclass{uafthesis2004_TU}
+
+That is just for this tutorial.  Once you are writing your thesis and
+have the above five magic files in the write directory on your system,
+you only need to have:
+
+  \documentclass{uafthesis2004}
+
+This is the only silly, confusing part of these instructions.  The
+rest will flow and be as clear as Budweiser beer leaving your system
+on the morning after graduation.
+
+*****************************************************************
+-1. Fast Track
+
+Find the phrase `Big Grand Poobah Cahoona Final Example' somewhere in
+step 15 below and see if you can run all of the commands there.  If
+so, then you are finished.  If you want to understand what just
+happened, read on.
+
+*****************************************************************
+0. Overview
+
+There is a master file called thesis12.tex that will be your ultimate
+goal.  Look at thesis_final.ps, thesis12_FINAL_EXAMPLE.pdf to see what
+that produces.  In this tutorial, you build up to all of the bells and
+whistles contained in that final version.  In general, here are the
+steps:
+
+> latex thesis
+> bibtex thesis
+> latex thesis
+> latex thesis
+> latex thesis (this last one is only sometimes necessary)
+
+These commands create `thesis.dvi' and you can view it with the
+command:
+
+> xdvi thesis.dvi
+
+If you like what you see, you can make the postscript file for
+printing with 
+
+> dvips thesis.dvi
+
+This creates a `thesis.ps' file.  You can view this with:
+
+> gv thesis.ps
+
+If you have complicated figures then the .dvi file displays more
+quickly than the .ps file but it may miss a few subtle formatting
+issues and it gets confused at times.  If xdvi gets confused then just
+quit it (with `q') and then rerun it.
+
+Both xdvi and gv refresh if you create a new version of the document.
+This is handy.  Keep three windows up on the screen:  an editor, a
+shell and xdvi/gv.  As you make changes in the editor and rerun latex,
+you see your changes.
+
+In the end, convert to .pdf to pass around the web and to your
+grandparents for their birthdays.
+
+*****************************************************************
+1. Basics
+
+Unpack everything and start playing. 
+
+> tar xzf UAFTHESIS_LATEX_TUTORIAL.tgz 
+> cd UAFTHESIS_LATEX_TUTORIAL
+> latex thesis1
+> xdvi thesis1.dvi &
+> dvips thesis1
+> gv thesis1.ps &
+> ps2pdf thesis1.ps
+> xpdf thesis1.pdf
+     or
+> acroread thesis1.pdf    
+
+If these things do not work, do not go any further.  Get your latex
+working on your machine.  You have to be able to do all of this to use
+the rest of this tutorial.
+
+Perhaps your machine/system is set up to make a4 paper as the default
+instead of letter paper (standard U.S. paper, 8.5 x 11 inches).  There
+are various ways to find this out.  In general, if things look or
+print funny with margins that look screwed up then there is a good
+chance a4 layout is being used instead of letter layout.  If that is
+the case, then change the dvips command above to:
+
+> dvips -t letter thesis1
+
+For everything below, I will assume you will take care of this detail
+on your own.
+
+You can always erase the entire directory and run the `tar' command
+again to start fresh.
+
+*****************************************************************
+2. Document class
+
+The top two lines of any of the thesisx.tex files are:
+
+%\documentclass{uafthesis2003_TU}
+\documentclass{uafthesis2004_TU}
+
+The `%' symbol means to ignore the rest of the line (comment).
+Uncomment the 2003 class and comment out the 2004 class, then rerun
+step 1 above.  The difference is that 2003 uses large, uncentered
+chapter headings and lots of extra space.  Such theses have been
+turned in by the Physics Department students for the past 10 years but
+apparently it is in violation of the Thesis Handbook (Craven was
+really bent out of shape about this).  The 2004 version uses the same
+font size all the way through, centers chapter headings and titles and
+puts subsection titles against the left margin.  I called the grad
+school and they really did not care as long as things are consistent.
+But maybe they will care one day.  Use your choice but be prepared to
+change.
+
+But this is a great example of how simple it is to change format.
+
+*****************************************************************
+3. External files
+
+To keep things organized, make separate sections and chapters as
+separate files.  Here are the first three required in the front matter
+section of the thesis.  Front matter means Table of Contents, lists of
+figures, tables and appendices, acknowledgements, quotes.  It is all
+of the stuff before your main stuff.  Front matter has its own page
+numbering in Roman numerals, starting at i.  The thesis begins after
+the (optional) quotepage with Arabic numbering starting with 1.
+
+> latex thesis2
+> xdvi thesis2.dvi &
+> dvips thesis2
+> gv thesis2.ps &
+
+From now on, I will only use the latex commands.  You had better
+remember the xdvi/dvips/gv stuff on your own.  Scratch it into your
+forehead. 
+
+*****************************************************************
+4. Font
+
+Hilary hates the standard latex font so she found a better one called
+ppl.  That is why you will find a file called ppl.sty in this
+directory.  Insert the following line into the top of your .tex file:
+
+\usepackage{ppl} %% Hil's font
+
+> latex thesis3
+
+Ain't it prettier?
+
+*****************************************************************
+5. Adding a chapter.
+
+> latex thesis4
+
+But now you have to do it twice.
+
+> latex thesis4
+
+Why?  Because you now have references and page numbers.  This is a
+theme for all latex'ing so pay attention.  During the first pass,
+latex reads page numbers of each section to know what to put in the
+Table of Contents.  Extra files are created.  During the second pass,
+latex reads the extra files and puts the correct numbers in the Table
+of Contents and lists of figures, etc.  It is a cool system and this
+way actually works well.  Sometimes you are forced to run latex a
+third time.  This happens for very complicated documents, with lots of
+sections, figures, tables, bibliographies, etc.  Your final thesis
+will probably have to be run at least three times.  
+
+*****************************************************************
+6. Makefile
+
+Instead of running latex 2 or 3 or more times, use the Makefile.  To
+execute step 5, use:
+
+> make MAIN=thesis4 latex2
+
+For steps 1, 3 and 4:
+
+> make MAIN=thesis1 latex1
+> make MAIN=thesis2 latex1
+> make MAIN=thesis3 latex1
+
+latex1 runs latex once and latex2 runs it twice.  Examine the Makefile
+if you want to understand it.  But make is a black hole in itself (but
+one worth learning.  You really should spend 1 or 2 hours reading the
+info/man pages on make to understand what is happening.  It is easy
+and worth your while later.).
+
+If you want to start fresh, type `make allclean' and you will have a
+virgin directory containing only the original files from the .tar.gz
+package. 
+
+From now on, I will use make commands.
+
+*****************************************************************
+7. Latex output
+
+At this point you should start seeing a lot of output that may or may
+not make sense.  There should be no errors after the second pass but
+there will be on the first virgin pass.  This is because latex looks
+for the extra files to fill in the correct page numbers.  It only
+finds these on the second pass.
+
+If you see something like this at the end, things are good:
+
+  Output written on thesis4.dvi (9 pages, 8440 bytes).
+  Transcript written on thesis4.log.
+
+If you see something with the word `error', things are not as good.
+But always trace back to the simplest file that works.  Take these
+known files that work and slowly add your stuff and alter them.  In
+that way, you can iteratively build big and complicated (and super
+sweet) documents.
+
+*****************************************************************
+8. Bibliography
+
+Now there is another chapter with citations.  Run:
+
+> make MAIN=thesis5 latex
+
+You probably do not need an extra run but sometimes you want to just
+be sure (or paranoid) so give an extra:
+
+> make MAIN=thesis5 latex1
+
+The first run runs latex, then bibtex and then latex twice more.
+Bibtex is the program that reads .bib files and makes a lovely
+Bibliography section.  In thesis5.tex, the two lines at the bottom
+specify the bibliography:
+
+\bibliographystyle{unsrtabbrv3_TU}
+\bibliography{thesis_TU}
+
+They say that my actual bibliography data is in thesis_TU.bib and that
+I am using the bibliography style found in unsrtabbrv3_TU.bst.  Look
+at the .bib file to see the format.  I like to make it way more
+complicated than necessary with the extra abbreviations at the top.
+Programmers will like this, non-programmers will not.  Take your pick.
+
+The unsrtabbrv3_TU.bst file is a mixture of the basic latex .bst
+files, unsrt.bst and abbrv.bst.  I doctored them so that references in
+the bibliography appear in the order that they are in the text
+(unsorted, not alphabetical).  Also, as many words as possible are
+abbreviated (the abbrv.bst part).  This is the standard format for
+Physical Review journals and it also means that I did not have to
+chase down the titles to articles, since titles are not shown.
+
+*****************************************************************
+9. AGU Bibliography
+
+Other journals, like JGR and other AGU related publications, prefer
+longer citation styles, so make 3 changes:
+
+   --\usepackage[square]{natbib}
+   --use \citet instead of \cite in the text
+   --\bibliographystyle{agu04_TU}
+
+These changes are made in thesis6.tex.  There is a new chapter file
+called chapter1_agu.tex where the only difference is the \cite
+commands.  The final bibliography is in alphabetical order and the
+references in the text say something like `Bak et al. [1987, 1988]'
+instead of `[1,2,3]'. 
+
+> make MAIN=thesis6 latex
+
+At this point you should really begin to see the power of latex.
+Slight changes in the main file make the entire document look
+different.  
+
+*****************************************************************
+10. Cool renewcommand
+
+You do not even have to change all of the \cite to \citet commands,
+though you can easily do so with a search and replace feature in an
+editor.  Instead, be really cool and add this to the top of
+chapter1.tex: 
+
+\renewcommand{\cite}{\citet}
+
+Why do this?  If you submit to a journal and then put that same paper
+in your thesis later, then all you do is change the three lines in the
+main thesis.tex file and then add (or uncomment) this renewcommand
+line in the actual chapter file.
+
+> make MAIN=thesis7 latex
+
+Don't forget that you still need to make the three changes in the
+thesis.tex file as shown in step 9.
+
+*****************************************************************
+11. More chapters with figures
+
+Lots of new things here:
+  --\usepackage{amsmath,graphicx} for gather math environment and for
+    including .eps figures
+  --Lots of helpful macros in \input abbrevs_TU.tex
+
+Add more chapters with references, see how contents and lists change.
+Now, I included a few figures.  A nice way to keep things organized is
+to make a command telling where all of your figures are:
+
+\newcommand{\figeps}[1]{fig/#1.eps}
+
+That is in the abbrevs_TU.tex file.
+
+> make MAIN=thesis8 latex
+> xdvi thesis8.dvi &                (but you knew this, right?)
+
+Now you are doing some serious latex'ing.  Notice the Lists of Figures
+and Tables now?
+
+*****************************************************************
+12. Separate bibliography in each chapter
+
+***
+I USE THIS TECHNIQUE FOR THE REST OF THE DEMO.  BUT IF YOU ARE USING A
+THESIS STYLE WHERE ALL OF YOUR REFERENCES ARE AT THE END THEN YOU CAN
+IGNORE A LOT OF THIS.  MAKE SURE, THOUGH, YOU PAY ATTENTION TO STEP 14
+BELOW IF YOU HAVE MULTIPLE APPENDICES (AT WHICH POINT YOU WOULD BE A
+FREAK OF NATURE).
+***
+
+If your thesis consists of separate submitted or published papers,
+then you want to have a bibliography at the end of each chapter
+instead of one large one at the end.  It is one of the two formats
+that the grad school permits and I highly recommend it for at least
+three reasons:
+
+  1) It makes you think in terms of writing separate papers to be
+     published, which is often a good thing in grad school.
+  2) Once those papers are written, there is very little reformatting
+     or retyping to make your thesis.  Simply throw in a 
+     `\include{chapter2}' line and you are ready to defend.
+  3) If your committee thinks that these are published (or, at least,
+     submitted) papers, they are less likely to have major comments.
+     That is, if they think it has already been peer-reviewed, then
+     they may assume all of the hard stuff has been worked out.  This
+     is especially the case if your committee members are not experts
+     in your tiny subfield.
+
+Here is how you put separate bibliographies in each chapter.
+
+In the main thesis.tex file:
+
+\usepackage{chapterbib}
+
+Insert at the end of each chapter file:
+
+\bibliographystyle{unsrtabbrv3_TU}
+\bibliography{thesis_TU}
+
+Run latex once:
+
+> make MAIN=thesis9 latex1
+
+This will create a .aux file for each of your chapters.  This is,
+finally, why you use `\include{intro_bib}' instead of `\input
+intro_bib.tex' in the main file.  Now run bibtex on each of those .aux
+files:
+
+> bibtex chapter1_bib
+> bibtex chapter2_bib
+
+Run latex twice:
+
+> make MAIN=thesis9 latex2
+
+The intro and conclusions have no citation commands so no need to run
+bibtex on them (and no need to include the \bibliography command at
+the end of those files).
+
+The bibliographies do not show up in the Table of Contents.  Check
+that with:  
+
+> xdvi thesis9.dvi &
+
+This is not ok with the grad school.  So you have to do something to
+make that work.  Pay attention here.  It is almost tricky.
+
+You have to edit the thesis9.toc file.  This can be the very last step
+when you are about to print out your thesis.  All we are going to do
+is make the new Table of Contents pages that should list the
+bibliography.  For instance, if you are looking at thesis9.dvi then
+you see that bibliographies for Chapters 2 and 3 appear on pages 5 and
+12, respectively.  Remember those numbers.  Here we go.
+
+Edit the .toc file.  You need to add these lines in the appropriate
+places:
+
+\contentsline {section}{\numberline {}Bibliography}{5}
+...
+\contentsline {section}{\numberline {}Bibliography}{12}
+
+Notice the page numbers, 5 and 12.  If you get confused, look for the
+file called thesis9.toc.BIB_TWEAKED.  This is how your new, edited
+.toc file should look like.
+
+Once you do this, make a backup of the new .toc file because the next
+step will create a new .toc file that you will not like.
+
+> cp thesis9.toc thesis9.toc.backup
+
+Now, run and look at it:
+
+> latex thesis9
+> xdvi thesis9.dvi
+
+Notice the only difference is the Table of Contents page now lists the
+page numbers of the two bibliograhies, 5 and 12.  
+
+Make your postscript version:
+
+> dvips thesis9.dvi
+
+And you are done.  
+
+The thing to remember is this: your most recent run of 'latex' erased
+the .toc file that you added the new lines to.  That is why you made
+the backup.  If you tweak anything else in the entire document, run
+latex and bibtex as many times as needed to get everything perfect,
+except for the Table of Contents.  Then, do this .toc tweaking as your
+final step.  Since you already have a .toc.backup file, it should be
+minimal effort.
+
+One possible issue is if your Table of Contents without the tweaking
+just fits to the end of a page.  Then, adding the new Bibliography
+lines may push things to new pages, screwing up your page count.  The
+solution to this is trivial and will be left as an exercise for the
+reader.
+
+If you have big problems, email me (see note at beginning of this
+README).
+
+*****************************************************************
+13. One Appendix
+
+Use the \appendix command to change chapter labelling from Arabic
+numbers to captial letters.  This goes after your last chapter and
+before your first appendix.
+
+\include{conclusions}
+\appendix
+\include{appendix1}
+
+If you have only one appendix, then the Appendix will be included in
+the Table of Contents and you are through.
+
+> make MAIN=thesis10 latex1
+> bibtex chapter1_bib
+> bibtex chapter2_bib
+> bibtex appendix1               (if appendix has references)
+> make MAIN=thesis10 latex2
+
+If the Appendix has references then you have to have `bibtex
+appendix1' command before the latex2 command.
+
+Of course, now we have the same issue of listing the Bibliographies in
+the Table of Contents.  Refer to previous lesson.  But to be complete,
+I will do it here, in shorthand:
+
+Just to see that they are not there and to find the right page
+numbers: 
+
+> xdvi thesis10.dvi
+
+Bibliographies are on pages 5, 12 and 18.  Edit thesis10.toc, make
+the backup and relatex:
+
+> ed thesis10.doc    (it should look like thesis10.toc.BIB_TWEAKED)
+> cp thesis10.toc thesis10.toc.backup
+> latex thesis10
+> xdvi thesis10.dvi
+
+And wowee zowee, there it is.
+
+*****************************************************************
+14. Multiple Appendices
+
+Same as above, but now add more appendices.
+
+\include{conclusions}
+\appendix
+\include{appendix1}
+\include{appendix2}
+
+And add this command at the top, under \listoftables:
+
+\listofappendices
+
+The Grad School requires a separate List of Appendices if there is
+more than one so we now get to muck with low-level latex again.  But
+it is really pretty easy.
+
+After doing the normal stuff:
+
+> make MAIN=thesis11 latex1
+> bibtex chapter1_bib
+> bibtex chapter2_bib
+> bibtex appendix1               (if appendix has references)
+> bibtex appendix2               (if appendix has references)
+> make MAIN=thesis11 latex2
+
+look at the file with `xdvi thesis11.dvi'.  Look at the Table of
+Contents.  The two appendices are listed there.  You do not want
+them there; they need to be in a separate List.
+
+Open the file thesis11.toc and remove the bottom lines:
+
+\gdef \the@ipfilectr {@-5}
+\contentsline {chapter}{\numberline {A}Do Your Socks Really Smell?}{16}
+\gdef \the@ipfilectr {}
+\gdef \the@ipfilectr {@-6}
+\contentsline {chapter}{\numberline {B}Comment on ``Do Your Socks Really Smell?''}{19}
+\gdef \the@ipfilectr {}
+
+Resave the .toc file.  
+
+Delete the file thesis11.loa, if it exists.  Now recreate this file
+(thesis11.loa) and add some of the deleted lines from above to this:
+
+\contentsline {chapter}{\numberline {A}Do Your Socks Really Smell?}{16}
+\contentsline {chapter}{\numberline {B}Comment on ``Do Your Socks Really Smell?''}{19}
+
+Notice that {16} and {19} refer to the page numbers where the
+Appendices begin.
+
+Now make backups of the .toc and .loa files:
+
+> cp thesis11.toc thesis11.toc.backup
+> cp thesis11.loa thesis11.loa.backup
+
+Run latex ONLY ONCE MORE:
+
+> make MAIN=thesis11 latex1
+
+Check to see that the new thesis11.dvi file looks right.
+
+Do not run latex again because new .loa and .toc files have been
+created, erasing your change.  If you edit your text, you will have to
+start this step over.
+
+This is the really new part of uafthesis2004.cls.
+
+One detail:  you may not like the bold print of the appendices,
+especially if there are no subsections to the appendices.  In that
+case, make the following change to you new .loa file:
+
+\contentsline {section}{\numberline {A}Do Your Socks Really Smell?}{16}
+\contentsline {section}{\numberline {B}Comment on ``Do Your Socks Really Smell?''}{19}
+
+If you had made backups above then you can do the following:
+
+edit thesis11.loa.backup, changing {chapter} to {section}.
+> cp thesis11.toc.backup thesis11.toc
+> cp thesis11.loa.backup thesis11.loa
+> make MAIN=thesis11 latex1
+
+Now you will see non-bold font and a bunch of '....' filling in the
+gap froom title to page number.  The down side is that the indentation
+may be a bit in on the left side.  You can muck with the `indent'
+variable in the \@dottedtocline command (see pages 32-35 of the Latex
+Companion by Goosens, et al. to understand what I am talking about).
+Again, this exercise will be left to the reader.
+
+*****************************************************************
+15. List of Other Materials
+
+If you add a pocket or anything else to your thesis (like a CD-ROM)
+then you have to have one more List in the Table of Contents.  Follow
+the exact same procedure as in step 14, but now you must add the
+command:
+
+\listofothermaterials
+
+Notice that this goes before the \listofappendices.  The file that you
+must edit is the thesis12.lom file.  You have to create this by hand.
+It is simple.  Here is the example:
+
+\renewcommand\@pnumwidth{3.55em}
+\contentsline {section}{\numberline {A}CD-ROM of Thesis, Defense and Sandpile Code}{Pocket}
+\renewcommand\@pnumwidth{1.55em}
+
+Again, once you save this and run latex once, it will be erased.  A
+good habit is to make thesis12.lom.bak and thesis12.loa.bak so they
+will always be there.  Then copy them to thesis12.lom and thesis12.loa
+and run latex your final time.
+
+I did the \@pnumwidth stuff above because the word `Pocket' is wider
+than is allowed for a page number.  So I changed it just for this one
+line and then changed it back to what it was (as found in the
+uafthesis2004.cls file).
+
+To be thorough, the Big Grand Poobah Cahoona Final Example:
+
+> make allclean
+> make MAIN=thesis12 latex1
+> bibtex chapter1_bib
+> bibtex chapter2_bib
+> bibtex appendix1
+> bibtex appendix2
+> make MAIN=thesis12 latex2
+> xdvi thesis12.dvi
+
+Notice that:
+
+  1) Bibliographies are not listed in Table of Contents (page iv)
+  2) Appendices are listed in Table of Contents (pages iv-v), not in
+     List of Appendices (page ix).
+  3) List of Materials (page viii) is blank.
+
+To fix that:
+
+Edit thesis12.toc so it looks like thesis12.toc.BIB_LOA_LOM_TWEAK.
+Edit thesis12.loa so it looks like thesis12.loa.BIB_LOA_LOM_TWEAK.
+Edit thesis12.lom so it looks like thesis12.lom.BIB_LOA_LOM_TWEAK.
+
+Make backups:
+
+> cp thesis12.toc thesis12.toc.backup
+> cp thesis12.loa thesis12.loa.backup
+> cp thesis12.lom thesis12.lom.backup
+
+Run latex once:
+
+> latex thesis12
+
+Look at it:
+
+> xdvi thesis12.dvi
+
+And there you go.
+
+Convert it to Postscript and then PDF with:
+
+> dvips thesis12.dvi
+> ps2pdf thesis12.ps
+
+Now if your thesis12.pdf matches my thesis12_FINAL_EXAMPLE.pdf then
+everything worked and you are ready to graduate.
+
+*****************************************************************
+16. Using gv to your advantage.
+
+--Color figures:  Let's say some of your pages should be printed in
+  color, on an expensive color printer, but the rest can be printed in
+  good ol' black and white on the cheap printer.  Once you have your
+  entire thesis ready to go, after step 15 above, and you like the
+  .dvi file, convert it to Postscript with `dvips thesis12.dvi'.  View
+  it with `gv thesis12.ps'.  Mark the color pages by middle clicking
+  on pages 10, 11, 17 and 20.  Now choose `Save Marked' and give it
+  the name `thesis12_color.ps'.  The foolish file browser that pops up
+  always seems to pop up in your home directory, not the one in which
+  you are working.  Notice this and deal with it.  To toggle all of
+  the color pages to off and all of the black and white pages to on,
+  click the 'Toggle Odd' button and then the 'Toggle Even' button.
+  Now you can save all of these pages as `thesis12_bw.ps'.
+
+--Often, it happens that you think you have completed everything, and
+  you went through all of the mess above to make your Table of
+  Contents, your List of Appendices/Other Materials just perfect.
+  Then you notice that you misspelled `nincompoop' in Chapter 3 and
+  you have to run latex again.  This does not change any of the page
+  numbering or such but it messes up your .toc, .loa, .lom, etc. files
+  and you groan under the pressure of relearning this stuff.  Here is
+  the trick.  Once you get all of the front matter (the roman numeral
+  pages) to your liking, toggle them in gv and print them like you did
+  the _color and _bw pages above.  For instance, in this thesis12
+  example, toggle the first 11 pages and save them as
+  `thesis12_front.ps'.  Now they are carved in stone for printing
+  later and you can relatex the rest, saving only the remaining
+  pages as needed.  Then you print these files separately.  At the end
+  you can print thesis12_color.ps to the expensive printer and
+  thesis12_bw.ps and thesis12_front.ps to the cheap printer.
+  
+  The down side to this is that you do not have a final, single
+  document that you can pass out to the world.  You will find that in
+  the intermediary stages, this is ok and handy.  When you have 
+  defended, made all of your corrections and received your signatures
+  on the signature page, you should insert a secret random sentence
+  somewhere in the middle of your thesis.  Noone will ever read it
+  again and you can show this to your friends when it is in the
+  library in 20 years.  You already have your signatures.  Such
+  sentences in the past have been `I really like the Atlanta Braves'
+  and `I love David Beckham.'  Keep it short so it does not mess up
+  any page numbering.  Relatex everything, do a final bit of
+  .toc/.loa/.lom maneuvering, forget about separate color/bw/front
+  files and you have your finished product, a huge .ps file that will
+  take a few minutes to run. 
+
+  But Postscript files are too huge to pass around the web and Macs
+  and Windows do not know what to do with them.  People like .pdf
+  files.  So your last task is to convert from Postscript to PDF:
+
+> ps2pdf thesis12.ps
+> xpdf thesis12.pdf
+
+  This should look like thesis12_FINAL_EXAMPLE.pdf.
+
+
+
+
+

@@ -1,0 +1,58 @@
+%\documentclass{uafthesis2003_TU}
+\documentclass{uafthesis2004_TU}
+
+\special{papersize=8.5in,11in}
+\usepackage{ppl} %% Hil's font
+
+\usepackage{amsmath,graphicx,array}
+\usepackage{chapterbib}
+
+\begin{document}
+
+\input abbrevs_TU.tex
+
+\title{Building Blocks of Self-Organized Criticality}
+\author{Ryan Woodard}
+
+\degreeyear{2004}
+\degreemonth{August}
+\degree{Doctor of Philosophy}
+\numberofmembers{5}
+\prevdegrees{B.S., M.S.}
+\college{College of Natural Science and Mathematics}
+
+\makesig
+\maketitle
+
+%% Must use \input, not \include
+\begin{abstract}
+  \input abstract.tex
+\end{abstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\listofappendices
+
+%% Must use \input, not \include
+\begin{acknowledgements}
+  \input acknow.tex
+\end{acknowledgements}
+
+%% Quotepage is optional and gratuitous.  Use it.
+%% Must use \input, not \include
+\begin{quotepage}
+  \input quotepage.tex
+\end{quotepage}
+
+%% Now it is cooler, for later purposes, to use \include
+\include{intro}
+\include{chapter1_bib}
+\include{chapter2_bib}
+\include{conclusions}
+
+\appendix
+\include{appendix1}
+\include{appendix2}
+
+\end{document}
