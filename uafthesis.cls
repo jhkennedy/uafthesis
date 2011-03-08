@@ -191,7 +191,7 @@ Committee Chair \vskip2.5ex
 \fi
 \noindent\phantom{RECOMMENDED:}\hfill\rule{3in}{.05mm}
 \vskip-1ex\relax
-\noindent\hskip3in\relax Chair, Department of Physics
+\noindent\hskip3in\relax Chair, \@department
 \bigskip \bigskip \bigskip \par
 \noindent APPROVED: \hspace{.75in} \rule{3.75in}{.05mm}
 \vskip-1ex\relax
