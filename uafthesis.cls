@@ -13,9 +13,12 @@
 
 %%  Edited by Ryan Woodard 2004/8/16
 %%        Made all fonts the same size so that Craven will shut up.
+%%
+%%  Edited by Joshua Holbrook 2010/3/08
+%%  I'm not from the physics department. Also, bugfixes.
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{uafthesis2004}
+\ProvidesClass{uafthesis}
               [2004/08/17 v4.9 UAF thesis class]
 %%              [2002/12/18 v4.8 UAF thesis class]
 %%              [1999/02/05 v4.7 UAF thesis class]
@@ -73,6 +76,10 @@
 \setcounter{dbltopnumber}{2}
 \renewcommand\dbltopfraction{.7}
 \renewcommand\dblfloatpagefraction{.5}
+
+%% We need a degree!
+\def\@department{Department of Physics}
+\def\department#1{\gdef\@department{#1}}
 
 %% declarations used to declare arguments needed for the 
 %% construction of the front matter.  
