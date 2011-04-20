@@ -109,7 +109,7 @@
     \addcontentsline{toc}{section}{\titlename}
     \null\vfill
   \begin{center}
-    {\Large \bfseries {\expandafter\uppercase\expandafter{\@title}} \par}
+    {\bfseries {\expandafter\uppercase\expandafter{\@title}} \par}
     \bigskip \bigskip \medskip 
         A \par 
         \medskip 
