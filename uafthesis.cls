@@ -661,6 +661,7 @@ School
     \@chapteronetrue
     %% get this in contents as a section
     \addcontentsline{toc}{section}{\listappname}
+    \hfill \textbf{Page}
     \@starttoc{loa}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -678,6 +679,7 @@ School
     \@chapteronetrue
     %% get this in contents as a section
     \addcontentsline{toc}{section}{\listothermatname}
+    \hfill \textbf{Page}
     \@starttoc{lom}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -695,6 +697,7 @@ School
     \@chapteronetrue
     %% get this in contents as a section
     \addcontentsline{toc}{section}{\listfigurename}
+    \hfill \textbf{Page}
     \@starttoc{lof}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -712,6 +715,7 @@ School
     %% get this in contents as a section
     \@chapteronetrue
     \addcontentsline{toc}{section}{\listtablename}
+    \hfill \textbf{Page}
     \@starttoc{lot}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
