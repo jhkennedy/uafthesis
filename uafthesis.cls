@@ -715,7 +715,7 @@ School
     %% get this in contents as a section
     \@chapteronetrue
     \addcontentsline{toc}{section}{\listtablename}
-    \hfill \textbf{Page}
+    {\hfill\textbf{Page}}
     \@starttoc{lot}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
