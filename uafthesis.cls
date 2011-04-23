@@ -28,9 +28,11 @@
 \newif\if@openbib
 \newif\if@arabic
 \newif\if@chapterone
+\newif\if@nopageheading
 \@chapteronetrue
 \@arabicfalse
 \@openbibfalse
+\@nopageheadingfalse
 
 %% options have been reduced to what is reasonable for a uaf thesis
 \DeclareOption{10pt}{\renewcommand\@ptsize{0}}
@@ -396,7 +398,7 @@ School
     % props to mrdillon http://tex.stackexchange.com/questions/8296/add-page-above-page-numbers-in-table-of-contents
     % This page also gives hints on how to make this heading show up on
     % subsequent pages.
-    \hfill Page\par
+    \if@nopageheading\else \hfill Page\par \fi
     \nobreak
   }}
 
@@ -722,7 +724,8 @@ School
 \newdimen\bibindent
 \bibindent=1.5em
 \newenvironment{thebibliography}[1]
-     {\chapter*{\bibname
+     {\@nopageheadingtrue
+      \chapter*{\bibname
         \@mkboth{\uppercase{\bibname}}{\uppercase{\bibname}}}%
       \list{\@biblabel{\arabic{enumiv}}}%
            {\settowidth\labelwidth{\@biblabel{#1}}%
@@ -743,7 +746,8 @@ School
         \renewcommand\newblock{\hskip .11em \@plus.33em \@minus.07em}%
       \fi
       \sloppy\clubpenalty4000\widowpenalty4000%
-      \sfcode`\.=\@m}
+      \sfcode`\.=\@m
+      \@nopageheadingfalse}
      {\def\@noitemerr
        {\@latex@warning{Empty `thebibliography' environment}}%
       \endlist}
