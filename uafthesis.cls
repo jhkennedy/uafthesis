@@ -28,11 +28,17 @@
 \newif\if@openbib
 \newif\if@arabic
 \newif\if@chapterone
-\newif\if@nopageheading
 \@chapteronetrue
 \@arabicfalse
 \@openbibfalse
-\@nopageheadingfalse
+
+% These add the "page" headings. They are placed early to ensure that
+% they are the *first* item.
+\addtocontents{toc}{~\hfill \textbf{Page}\par}
+\addtocontents{loa}{~\hfill \textbf{Page}\par}
+\addtocontents{lot}{~\hfill \textbf{Page}\par}
+\addtocontents{lof}{~\hfill \textbf{Page}\par}
+\addtocontents{lom}{~\hfill \textbf{Page}\par}
 
 %% options have been reduced to what is reasonable for a uaf thesis
 \DeclareOption{10pt}{\renewcommand\@ptsize{0}}
@@ -395,10 +401,6 @@ School
   {\parindent \z@ \centering
     \reset@font
     \normalsize \bfseries  #1\par
-    % props to mrdillon http://tex.stackexchange.com/questions/8296/add-page-above-page-numbers-in-table-of-contents
-    % This page also gives hints on how to make this heading show up on
-    % subsequent pages.
-    \if@nopageheading\else \hfill Page\par \fi
     \nobreak
   }}
 
@@ -724,9 +726,10 @@ School
 \newdimen\bibindent
 \bibindent=1.5em
 \newenvironment{thebibliography}[1]
-     {\@nopageheadingtrue
+     {
       \chapter*{\bibname
-        \@mkboth{\uppercase{\bibname}}{\uppercase{\bibname}}}%
+        \@mkboth{\uppercase{\bibname}}{\uppercase{\bibname}}
+        }%
       \list{\@biblabel{\arabic{enumiv}}}%
            {\settowidth\labelwidth{\@biblabel{#1}}%
             \leftmargin\labelwidth
@@ -747,7 +750,8 @@ School
       \fi
       \sloppy\clubpenalty4000\widowpenalty4000%
       \sfcode`\.=\@m
-      \@nopageheadingfalse}
+      \@pageheadingtrue
+      }
      {\def\@noitemerr
        {\@latex@warning{Empty `thebibliography' environment}}%
       \endlist}
