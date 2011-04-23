@@ -393,6 +393,10 @@ School
   {\parindent \z@ \centering
     \reset@font
     \normalsize \bfseries  #1\par
+    % props to mrdillon http://tex.stackexchange.com/questions/8296/add-page-above-page-numbers-in-table-of-contents
+    % This page also gives hints on how to make this heading show up on
+    % subsequent pages.
+    \hfill Page\par
     \nobreak
   }}
 
@@ -609,7 +613,6 @@ School
     \chapter*{\contentsname
         \@mkboth{\uppercase{\contentsname}}{\uppercase{\contentsname}}}%
     \@chapteronetrue
-    \hfill \textbf{Page}
     \@starttoc{toc}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -661,7 +664,6 @@ School
     \@chapteronetrue
     %% get this in contents as a section
     \addcontentsline{toc}{section}{\listappname}
-    \hfill \textbf{Page}
     \@starttoc{loa}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -679,7 +681,6 @@ School
     \@chapteronetrue
     %% get this in contents as a section
     \addcontentsline{toc}{section}{\listothermatname}
-    \hfill \textbf{Page}
     \@starttoc{lom}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -697,7 +698,6 @@ School
     \@chapteronetrue
     %% get this in contents as a section
     \addcontentsline{toc}{section}{\listfigurename}
-    \hfill \textbf{Page}
     \@starttoc{lof}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -715,7 +715,6 @@ School
     %% get this in contents as a section
     \@chapteronetrue
     \addcontentsline{toc}{section}{\listtablename}
-    {\hfill\textbf{Page}}
     \@starttoc{lot}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
