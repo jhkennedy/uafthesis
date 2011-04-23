@@ -18,7 +18,8 @@ The workaround is this:
 this case, the file is called ``example.toc.'' Also open up a corresponding
 .loa file (``example.loa'').
 \item Cut the lines that refer to appendices out of the .toc file and paste
-them into the .loa file. Save both.
+them into the .loa file. Save both. Make sure the first line in the .loa
+that adds "Page" above the pages column stays put.
 \item \emph{Make backups of both files.} This is because \LaTeX will overwrite
 the .toc file in the next step.
 \item Compile (\texttt{pdflatex example}) \emph{exactly once.}
