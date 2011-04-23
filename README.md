@@ -16,7 +16,7 @@ Whether these should actually be bundled with *uafthesis* or not is a matter of 
 
 ## The tutorial
 
-*tutorial/* includes the original "tutorial". If you already know LaTeX and bibtex, it shouldn't be too complicated, though I would use *pdflatex* over *latex* proper, and would like to use something other than *make* (probably either *waf* or *rubber*). In addition, I would like to cover graphics techniques. Anyways: It is my goal to rewrite parts of the tutorial (and perhaps the class if necessary) as I write my own thesis.
+*tutorial/* includes the original "tutorial". If you already know LaTeX and bibtex, it shouldn't be too complicated, though I would use *pdflatex* over *latex* proper. In addition, I would like to cover graphics techniques. Anyways: It is my goal to rewrite parts of the tutorial (and perhaps the class if necessary) as I write my own thesis.
 
 ## Call to Arms
 
@@ -42,4 +42,4 @@ Alternately, if git scares you, you can always email me or something, and we can
 
 ## Licensing
 
-Nothing is included with the original bundle, but based on the sources of the original latex materials, it's safe to say (imo) that the project is covered by the **LaTeX Project Public License**.
+Nothing is included with the original bundle, but based on the sources of the original latex materials, it's safe to say (imo) that the project is covered by the [**LaTeX Project Public License**](http://www.latex-project.org/lppl.txt).
