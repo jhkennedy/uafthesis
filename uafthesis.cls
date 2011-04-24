@@ -19,7 +19,8 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{uafthesis}
-              [2004/08/17 v4.9 UAF thesis class]
+%%              [2011/04/20 v5.0 UAF thesis class]
+%%              [2004/08/17 v4.9 UAF thesis class]
 %%              [2002/12/18 v4.8 UAF thesis class]
 %%              [1999/02/05 v4.7 UAF thesis class]
 \newcommand\@ptsize{}
