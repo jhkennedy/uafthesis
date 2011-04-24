@@ -6,23 +6,25 @@
 
     \documentclass{uafthesis}
 
-Or something like that.
 
-*ppl.sty* is a style file which gives you a nice font. As the original documentation says, "Hil's Font." Who's Hil? I don't know.
+## Contents:
 
-The *.bst* files are bibtex bibliography styles. *unsrtabbrv3.bst* is a style cobbled together by one of the previous authors, which features non-automatic alpha-sorting and maximal abbreviations. *agu04.bst* is a style used by the American Geophysical Union, and is known for being relatively verbose. It's also really popular.
+* `uafthesis.cls`: The class file itself.
+* `bib_styles/`: A few common bibliography styles for BibTeX:
+    * `/agufull08.bst` is the 2008 edition of the AGU bibliography style
+    * `unsrtabbrv3.bst` is a style written by one of the authors of `uafthesis.cls`.
+* `example.pdf`: Describes how to use `uafthesis.cls` while showing what it looks like.
+* `example/`: Contains the source code for `example.pdf`.
+* `README.md`: This file.
 
-Whether these should actually be bundled with *uafthesis* or not is a matter of debate, in my opinion. Ymmv.
-
-## The tutorial
-
-*tutorial/* includes the original "tutorial". If you already know LaTeX and bibtex, it shouldn't be too complicated, though I would use *pdflatex* over *latex* proper. In addition, I would like to cover graphics techniques. Anyways: It is my goal to rewrite parts of the tutorial (and perhaps the class if necessary) as I write my own thesis.
 
 ## Call to Arms
 
-If you're a UAF student writing a thesis in LaTeX and have some improvements to make, you should do so and share! Here's the process:
+If you're a UAF student writing a thesis in LaTeX and have some improvements to
+make, you should do so and share! `uafthesis.cls` could honestly use some TLC.
 
-1. Get a github account. It's easy and awesome.
+If you would like to use Github, here's the process for submitting changes:
+
 2. Fork this project. There's a button on the upper-right corner of the main page.
 3. *git clone* your new repository.
 4. Make changes.
@@ -30,9 +32,11 @@ If you're a UAF student writing a thesis in LaTeX and have some improvements to 
 6. *git push origin master*
 7. Hit me up with a pull request. This is also on the upper-right corner of the main page.
 
-Alternately, if git scares you, you can always email me or something, and we can figure something out.
+If you would rather not use git (if, for example, version control is scary and
+confusing), feel free to contact me at josh.holbrook@gmail.com and we can find 
+another way of updating the class file.
 
-## Contributors
+## Authors:
 
 * **Curt A. L. Szuberla**   13 November 1996
 * **Matt Heavner**           5 February 1999
