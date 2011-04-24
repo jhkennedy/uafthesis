@@ -6,6 +6,7 @@
 
     \documentclass{uafthesis}
 
+Its development web site is at <https://github.com/jesusabdullah/uafthesis>.
 
 ## Contents:
 
