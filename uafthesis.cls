@@ -15,7 +15,7 @@
 %%        Made all fonts the same size so that Craven will shut up.
 %%
 %%  Edited by Joshua Holbrook 2010/3/08
-%%  I'm not from the physics department. Also, bugfixes.
+%%        Fixed font size in title page, added "Page" headings.
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{uafthesis}
