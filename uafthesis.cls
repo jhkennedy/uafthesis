@@ -13,14 +13,14 @@
 
 %%  Edited by Ryan Woodard 2004/8/16
 %%        Made all fonts the same size so that Craven will shut up.
-%%
-%%  Edited by Joshua Holbrook 2010/3/08
-%%        Fixed font size in title page, added "Page" headings.
+
+%%  Edited by Ryan Woodard 2006/8/3
+%%        Added 'Page' right aligned over page numbers in Table
+%%        of Contents, List of Figures, etc.
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{uafthesis}
-%%              [2011/04/20 v5.0 UAF thesis class]
-%%              [2004/08/17 v4.9 UAF thesis class]
+\ProvidesClass{uafthesis2006}
+              [2004/08/17 v4.9 UAF thesis class]
 %%              [2002/12/18 v4.8 UAF thesis class]
 %%              [1999/02/05 v4.7 UAF thesis class]
 \newcommand\@ptsize{}
@@ -32,14 +32,6 @@
 \@chapteronetrue
 \@arabicfalse
 \@openbibfalse
-
-% These add the "page" headings. They are placed early to ensure that
-% they are the *first* item.
-\addtocontents{toc}{~\hfill \textbf{Page}\par}
-\addtocontents{loa}{~\hfill \textbf{Page}\par}
-\addtocontents{lot}{~\hfill \textbf{Page}\par}
-\addtocontents{lof}{~\hfill \textbf{Page}\par}
-\addtocontents{lom}{~\hfill \textbf{Page}\par}
 
 %% options have been reduced to what is reasonable for a uaf thesis
 \DeclareOption{10pt}{\renewcommand\@ptsize{0}}
@@ -86,10 +78,6 @@
 \renewcommand\dbltopfraction{.7}
 \renewcommand\dblfloatpagefraction{.5}
 
-%% We need a degree!
-\def\@department{Department of Physics}
-\def\department#1{\gdef\@department{#1}}
-
 %% declarations used to declare arguments needed for the 
 %% construction of the front matter.  
 %%   The year the degree will be officially conferred
@@ -118,7 +106,7 @@
     \addcontentsline{toc}{section}{\titlename}
     \null\vfill
   \begin{center}
-    {\bfseries {\expandafter\uppercase\expandafter{\@title}} \par}
+    {\Large \bfseries {\expandafter\uppercase\expandafter{\@title}} \par}
     \bigskip \bigskip \medskip 
         A \par 
         \medskip 
@@ -200,7 +188,7 @@ Committee Chair \vskip2.5ex
 \fi
 \noindent\phantom{RECOMMENDED:}\hfill\rule{3in}{.05mm}
 \vskip-1ex\relax
-\noindent\hskip3in\relax Chair, \@department
+\noindent\hskip3in\relax Chair, Department of Physics
 \bigskip \bigskip \bigskip \par
 \noindent APPROVED: \hspace{.75in} \rule{3.75in}{.05mm}
 \vskip-1ex\relax
@@ -356,6 +344,62 @@ School
               \if@tempswa
                 \twocolumn
               \fi}
+%% God bless the person at 
+%% http://theoval.sys.uea.ac.uk/~nlct/latex/thesis/node8.html
+%% Essentially, to add the word 'Page' right aligned on the
+%% same line as 'Table of Contents' we have to some of this.
+%% The upshot is that I will define a new \chapteruaf, \schapteruaf,
+%% and \@makeschapterheaduaf.
+%%
+%%    The first argument to \secdef tells LATEX what to do if
+%%    the unstarred version is used, and the second argument
+%%    tells LATEX what to do if the starred version is used. So
+%%    the command
+%%     \chapter{Introduction}
+%%    will use the command \@chapter, whereas the command
+%%     \chapter*{Acknowledgements}
+%%    will use the command \@schapter. The commands \@chapter
+%%    and \@schapter use the commands \@makechapterhead and
+%%    \@makeschapterhead, respectively, to format the chapter
+%%    heading, so if you want to change the chapter format, you
+%%    will need to redefine the commands \@makechapterhead and
+%%    \@makeschapterhead. The easiest way to do this is to look
+%%    for the code for these commands in report.cls and copy
+%%    them over to your new class file, mythesis, described
+%%    earlier, and edit the appropriate formatting commands.
+%%
+%% This is a total hack, but to maintain 'Table of Contents' in
+%% center of page and to position 'Page' correctly, I had to
+%% use vspace and hspace through trial and error until it looked
+%% correct.  If you print it out and hold a ruler to the lines
+%% and margins, it should be pretty good.  But if you do not like
+%% it then you can change the hspace and vspace arguments by
+%% a whee little bit.
+%%
+%% If you want the word 'Page' underlined, then use the commented
+%% out line below.
+\newcommand\chapteruaf{
+\if@arabic\relax\else\if@chapterone\setcounter{page}{1}\else\relax\fi\fi
+\@chapteronefalse
+                    \if@openright\cleardoublepage\else\clearpage\fi
+                    \thispagestyle{myheadings}%
+                    \global\@topnum\z@
+                    \@afterindentfalse
+                    \secdef\@chapter\@schapteruaf}
+\def\@schapteruaf#1{\if@twocolumn
+                   \@topnewpage[\@makeschapterheaduaf{#1}]%
+                 \else
+                   \@makeschapterheaduaf{#1}%
+                   \@afterheading
+                 \fi}
+\def\@makeschapterheaduaf#1{%
+  {\parindent \z@ \centering
+    \reset@font
+    \normalsize \bfseries  #1\par
+    \vspace{-18.3pt}\hspace{143mm} Page
+    \nobreak
+  }}
+
 \newcommand\chapter{
 \if@arabic\relax\else\if@chapterone\setcounter{page}{1}\else\relax\fi\fi
 \@chapteronefalse
@@ -615,7 +659,7 @@ School
     \else
       \@restonecolfalse
     \fi
-    \chapter*{\contentsname
+    \chapteruaf*{\contentsname
         \@mkboth{\uppercase{\contentsname}}{\uppercase{\contentsname}}}%
     \@chapteronetrue
     \@starttoc{toc}%
@@ -663,7 +707,7 @@ School
     \else
       \@restonecolfalse
     \fi
-    \chapter*{\listappname
+    \chapteruaf*{\listappname
       \@mkboth{\uppercase{\listappname}}%
               {\uppercase{\listappname}}}%
     \@chapteronetrue
@@ -680,7 +724,7 @@ School
     \else
       \@restonecolfalse
     \fi
-    \chapter*{\listothermatname
+    \chapteruaf*{\listothermatname
       \@mkboth{\uppercase{\listothermatname}}%
               {\uppercase{\listothermatname}}}%
     \@chapteronetrue
@@ -697,7 +741,7 @@ School
     \else
       \@restonecolfalse
     \fi
-    \chapter*{\listfigurename
+    \chapteruaf*{\listfigurename
       \@mkboth{\uppercase{\listfigurename}}%
               {\uppercase{\listfigurename}}}%
     \@chapteronetrue
@@ -715,7 +759,7 @@ School
     \else
       \@restonecolfalse
     \fi
-    \chapter*{\listtablename
+    \chapteruaf*{\listtablename
       \@mkboth{\uppercase{\listtablename}}{\uppercase{\listtablename}}}%
     %% get this in contents as a section
     \@chapteronetrue
@@ -727,10 +771,8 @@ School
 \newdimen\bibindent
 \bibindent=1.5em
 \newenvironment{thebibliography}[1]
-     {
-      \chapter*{\bibname
-        \@mkboth{\uppercase{\bibname}}{\uppercase{\bibname}}
-        }%
+     {\chapter*{\bibname
+        \@mkboth{\uppercase{\bibname}}{\uppercase{\bibname}}}%
       \list{\@biblabel{\arabic{enumiv}}}%
            {\settowidth\labelwidth{\@biblabel{#1}}%
             \leftmargin\labelwidth
@@ -750,9 +792,7 @@ School
         \renewcommand\newblock{\hskip .11em \@plus.33em \@minus.07em}%
       \fi
       \sloppy\clubpenalty4000\widowpenalty4000%
-      \sfcode`\.=\@m
-      \@pageheadingtrue
-      }
+      \sfcode`\.=\@m}
      {\def\@noitemerr
        {\@latex@warning{Empty `thebibliography' environment}}%
       \endlist}
@@ -797,6 +837,7 @@ School
       #1\strut}}}
 
 %% change names here if'n you'd rather call 'em by a different name
+\newcommand\contentsnameblah{Blah of Contents}
 \newcommand\contentsname{Table of Contents}
 \newcommand\signame{Signature Page}
 \newcommand\titlename{Title Page}
