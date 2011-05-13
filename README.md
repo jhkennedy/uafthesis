@@ -8,7 +8,7 @@
 
 Its development web site is at <https://github.com/jesusabdullah/uafthesis>.
 
-## Contents:
+## Basic Contents:
 
 * `uafthesis.cls`: The class file itself.
 * `bib_styles/`: A few common bibliography styles for BibTeX:
@@ -23,6 +23,15 @@ Its development web site is at <https://github.com/jesusabdullah/uafthesis>.
 * `master` is the main branch, and is based on the 2004 thesis class.
 * `2006` is a side branch which contains Ryan Woodard's 2006 version of `uafthesis.cls` which also tackled the missing "page" headers problem. A cursory analysis based on `diff uafthesis2004.cls uafthesis2006.cls` indicates that my solution to the "page heading" problem is probably better/easier. However, I may be wrong, and I really appreciate Ryan's work, so it's included in its own branch.
 
+## Help
+
+If you don't know how to use LaTeX or need general support, I would recommend the following resources for learning and asking questions:
+
+* <http://en.wikibooks.org/wiki/LaTeX>
+* <http://tex.stackexchange.com>
+* <irc://freenode.net/#latex>
+
+For questions directly pertaining to `uafthesis.tex`, refer to `example/example.pdf` or contact the latest author via [github](https://github.com/jesusabdullah/uafthesis/issues), twitter (http://twitter.com/jesusabdullah) or [email](email:josh.holbrook@gmail.com).
 
 ## Call to Arms
 
