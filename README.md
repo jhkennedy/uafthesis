@@ -18,6 +18,11 @@ Its development web site is at <https://github.com/jesusabdullah/uafthesis>.
 * `example/`: Contains the source code for `example.pdf`.
 * `README.md`: This file.
 
+## Branches:
+
+* `master` is the main branch, and is based on the 2004 thesis class.
+* `2006` is a side branch which contains Ryan Woodard's 2006 version of `uafthesis.cls` which also tackled the missing "page" headers problem. A cursory analysis based on `diff uafthesis2004.cls uafthesis2006.cls` indicates that my solution to the "page heading" problem is probably better/easier. However, I may be wrong, and I really appreciate Ryan's work, so it's included in its own branch.
+
 
 ## Call to Arms
 
