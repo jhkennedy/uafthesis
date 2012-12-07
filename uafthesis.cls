@@ -16,6 +16,9 @@
 %%
 %%  Edited by Joshua Holbrook 2010/3/08
 %%        Fixed font size in title page, added "Page" headings.
+%%
+%%  Edited by Jesse Frey 2012/12/6
+%%        Messed with the signature page some of us need longer lines
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{uafthesis}
@@ -107,6 +110,19 @@
 \def\numberofmembers#1{\gdef\@numberofmembers{#1}}
 %%   The name of your college or school
 \def\college#1{\gdef\@college{#1}}
+%%   The width of committee signature lines
+\def\@committeewidth{3in}
+\def\committeewidth#1{\gdef\@committeewidth{#1}}
+%%   The width of approval signature and date lines
+\def\@approvedwidth{3.75in}
+\def\approvedwidth#1{\gdef\@approvedwidth{#1}}
+%%   The space between "RECOMMENDED:" and the committee signature lines
+\def\@comitteespace{\hfill}
+\def\comitteespace#1{\gdef\@comitteespace{#1}}
+%%   The space between "APPROVED:" and the approval lines
+\def\@approvedspace{\hspace{0.75in}}
+\def\approvedspace#1{\gdef\@approvedspace{#1}}
+
 
 %% \maketitle makes titlepage. requires all the above macros 
 \def\maketitle{
@@ -164,56 +180,58 @@
     \bigskip \bigskip \medskip
 \vspace{.25in}
 \end{center}
-RECOMMENDED:\hfill\rule{3in}{.05mm}\vskip2.5ex\relax
-\noindent\phantom{RECOMMENDED:}\hfill\rule{3in}{.05mm}
-\vskip2.5ex\relax
-\noindent\phantom{RECOMMENDED:}\hfill\rule{3in}{.05mm}
-\vskip2.5ex\relax
-\ifnum \@numberofmembers = 3
-\vskip-3.5ex\relax
-\noindent\hskip3in\relax Advisory
-Committee Chair \vskip2.5ex
-\fi
-\ifnum \@numberofmembers = 4
-\noindent\phantom{RECOMMENDED:}\hfill\rule{3in}{.05mm}
-\vskip-1ex\relax
-\noindent\hskip3in\relax Advisory
-Committee Chair \vskip2.5ex
-\fi
-\ifnum \@numberofmembers = 5
-\noindent\phantom{RECOMMENDED:}\hfill\rule{3in}{.05mm}
-\vskip2.5ex\relax
-\noindent\phantom{RECOMMENDED:}\hfill\rule{3in}{.05mm}
-\vskip-1ex\relax
-\noindent\hskip3in\relax Advisory
-Committee Chair \vskip2.5ex
-\fi
-\ifnum \@numberofmembers = 6
-\noindent\phantom{RECOMMENDED:}\hfill\rule{3in}{.05mm}
-\vskip2.5ex\relax
-\noindent\phantom{RECOMMENDED:}\hfill\rule{3in}{.05mm}
-\vskip2.5ex\relax
-\noindent\phantom{RECOMMENDED:}\hfill\rule{3in}{.05mm}
-\vskip-1ex\relax
-\noindent\hskip3in\relax Advisory
-Committee Chair \vskip2.5ex
-\fi
-\noindent\phantom{RECOMMENDED:}\hfill\rule{3in}{.05mm}
-\vskip-1ex\relax
-\noindent\hskip3in\relax Chair, \@department
+RECOMMENDED:\@comitteespace
+\begin{minipage}[t]{\@committeewidth}
+    \rule{\@committeewidth}{.05mm}\vskip2.5ex\relax
+    \rule{\@committeewidth}{.05mm}
+    \vskip2.5ex\relax
+    \rule{\@committeewidth}{.05mm}
+    \vskip2.5ex\relax
+    \ifnum \@numberofmembers = 3
+    \vskip-3.5ex\relax
+    \relax Advisory Committee Chair \vskip2.5ex
+    \fi
+    \ifnum \@numberofmembers = 4
+    \rule{\@committeewidth}{.05mm}
+    \vskip-1ex\relax
+    \relax Advisory Committee Chair \vskip2.5ex
+    \fi
+    \ifnum \@numberofmembers = 5
+    \rule{\@committeewidth}{.05mm}
+    \vskip2.5ex\relax
+    \rule{\@committeewidth}{.05mm}
+    \vskip-1ex\relax
+    \relax Advisory Committee Chair \vskip2.5ex
+    \fi
+    \ifnum \@numberofmembers = 6
+    \rule{\@committeewidth}{.05mm}
+    \vskip2.5ex\relax
+    \rule{\@committeewidth}{.05mm}
+    \vskip2.5ex\relax
+    \rule{\@committeewidth}{.05mm}
+    \vskip-1ex\relax
+    \relax Advisory Committee Chair \vskip2.5ex
+    \fi
+    \rule{\@committeewidth}{.05mm}
+    \vskip-1ex\relax
+    \relax Chair, \@department
+\end{minipage}
 \bigskip \bigskip \bigskip \par
-\noindent APPROVED: \hspace{.75in} \rule{3.75in}{.05mm}
-\vskip-1ex\relax
-\noindent\phantom{APPROVED: \hspace{.75in} }Dean, {\@college}
-\vskip2.5ex\relax
-\noindent\phantom{APPROVED: \hspace{.75in} }\rule{3.75in}{.05mm}
-\vskip-1ex\relax
-\noindent\phantom{APPROVED: \hspace{.75in} }Dean of the Graduate
-School
-\vskip2.5ex\relax
-\noindent\phantom{APPROVED: \hspace{.75in} }\rule{3.75in}{.05mm}
-\vskip-1ex\relax
-\noindent\phantom{APPROVED: \hspace{.75in} }Date
+%\noindent APPROVED: \@approvedspace
+\noindent APPROVED: \@approvedspace
+\begin{minipage}[t]{\@approvedwidth}
+    \rule{\@approvedwidth}{.05mm}
+    \vskip-1ex\relax
+    Dean, {\@college}
+    \vskip2.5ex\relax
+    \rule{\@approvedwidth}{.05mm}
+    \vskip-1ex\relax
+    Dean of the Graduate School
+    \vskip2.5ex\relax
+    \rule{\@approvedwidth}{.05mm}
+    \vskip-1ex\relax
+    Date
+\end{minipage}
 \newpage
 }
 
