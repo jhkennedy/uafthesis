@@ -53,11 +53,12 @@ another way of updating the class file.
 
 ## Authors:
 
-* **Curt A. L. Szuberla**   13 November 1996
+* **Curt A. L. Szuberla**  13 November 1996
 * **Matt Heavner**           5 February 1999
 * **Dana Moudry**           18 December 2002
 * **Ryan Woodard**           2 December 2004
-* **Joshua Holbrook**              (present)
+* **Joshua Holbrook**        2010 -- present
+* **Jesse Frey**            10 December 2012
 
 ## Licensing
 
