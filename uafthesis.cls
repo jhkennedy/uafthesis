@@ -5,24 +5,58 @@
 %%        features of the former and is not so complex as the
 %%        latter; for my comments, see the "%%" marks
 %%
-
 %%  Edited by Matt Heavner 1999/02/05
 %%        Add index (so it'll show up on the toc)
 %%        Increment the version number
 %%  Edited by Dana Moudry 2002/12/18
-
+%%
 %%  Edited by Ryan Woodard 2004/8/16
 %%        Made all fonts the same size so that Craven will shut up.
 %%
-%%  Edited by Joshua Holbrook 2010/3/08
-%%        Fixed font size in title page, added "Page" headings.
+%%  Edited by Ryan Woodard 2006/8/3
+%%        Added 'Page' right aligned over page numbers in Table
+%%        of Contents, List of Figures, etc.
 %%
-%%  Edited by Jesse Frey 2012/12/6
-%%        Messed with the signature page some of us need longer lines
+%%  Edited by Bob McNabb 2013/6/18 (s/t Ronni Grapenthin)
+%%	  Changed "chapter" Table of Contents entry to include bold dots,
+%%		and include the word "Chapter" before the chapter number. Also
+%%		changed the spacing so that it's more like the GS's example
+%%	  Added "frontchapter" Table of Contents entry to do the exact same thing
+%%		as the "chapter" entry, but without the word "Chapter" in the ToC
+%%	  Included \flypage, to insert the required blank pages at the beginning (and end)
+%%		of everything. YOU WILL HAVE TO INSERT THESE IN YOUR thesis.tex FILE, before
+%%		\makesig, and just before \end{document}. The good news is, they don't mess up the
+%%		page counting. 
+%%	  Removed "Table of Contents" entry from the Table of Contents,
+%%	  	because this is just way too meta to think about.
+%%	  Changed default options to reflect current whims of graduate school, including margins and all
+%%		that jazz.
+%%	  NB: The chapteruaf* hack below will only add "page" to the top of the FIRST page of the ToC, etc.
+%%		If the present incarnation of Holy Mother Graduate School requires "page" on EACH
+%%		page of the ToC, etc., then insert the following line into your actual thesis.tex file:
+%%			\addtocontents{toc}{\protect\afterpage{~\hfill{Page}\par\medskip}} % for the toc
+%%			\addtocontents{lof}{\protect\afterpage{~\hfill{Page}\par\medskip}} % for the lof
+%%		If your thesis is table-heavy (or appendix, extra material, whatever) for some reason, 
+%%		change {lof} to {lot}, etc.You will probably have to play around with it some,
+%%		but the following locations worked for me:
+%%			{toc} after the acknowledgements
+%%			{lof} and {toc} after Chapter 2 (first "real" chapter)
+%%		This is a semi ugly hack, but it gets results, and will hopefully spare you the pain that I
+%%			(and others) have suffered.
+%%	  Added "Department" as a variable, thus removing the hard-wired "Physics" option.
+%%	  Futzed with spacing on sig page, now all lines are aligned and the same length, so that no one feels
+%%		inadequate. Also added a second \makesig macro (\makenamedsig), which puts the names that you specify
+%%		on the page. This is not required by the Grad school, but it looks nice. Just pray that the Dept. Chair
+%%		isn't out of town when you turn in your thesis.
 
-\NeedsTeXFormat{LaTeX2e}
+
+\NeedsTeXFormat{LaTeX2e} 
+%% have to require "afterpage" to get the stupid 'Page' heading in the ToC, LoF, LoT, etc.
+\usepackage{afterpage}
+\usepackage[switch]{lineno}
+\usepackage{tocloft}% http://ctan.org/pkg/tocloft
+%\usepackage[nottoc,notlot,notlof,section,numbib]{tocbibind}
 \ProvidesClass{uafthesis}
-%%              [2011/04/20 v5.0 UAF thesis class]
 %%              [2004/08/17 v4.9 UAF thesis class]
 %%              [2002/12/18 v4.8 UAF thesis class]
 %%              [1999/02/05 v4.7 UAF thesis class]
@@ -36,13 +70,17 @@
 \@arabicfalse
 \@openbibfalse
 
-% These add the "page" headings. They are placed early to ensure that
-% they are the *first* item.
-\addtocontents{toc}{~\hfill \textbf{Page}\par}
-\addtocontents{loa}{~\hfill \textbf{Page}\par}
-\addtocontents{lot}{~\hfill \textbf{Page}\par}
-\addtocontents{lof}{~\hfill \textbf{Page}\par}
-\addtocontents{lom}{~\hfill \textbf{Page}\par}
+% inserts a totally blank page 
+\newcommand{\blankpage}{
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+}
+% inserts two totally blank pages - a fly page! bah-dah!
+\newcommand{\flypage}{
+\blankpage\blankpage
+}
 
 %% options have been reduced to what is reasonable for a uaf thesis
 \DeclareOption{10pt}{\renewcommand\@ptsize{0}}
@@ -50,7 +88,7 @@
 \DeclareOption{12pt}{\renewcommand\@ptsize{2}}
 \DeclareOption{oneside}{\@twosidefalse \@mparswitchfalse}
 \DeclareOption{twoside}{\@twosidetrue  \@mparswitchtrue}
-\DeclareOption{draft}{\setlength\overfullrule{5pt}}
+\DeclareOption{draft}{\setlength\overfullrule{5pt}\linenumbers\modulolinenumbers[5]}
 \DeclareOption{final}{\setlength\overfullrule{0pt}}
 \DeclareOption{openright}{\@openrighttrue}
 \DeclareOption{openany}{\@openrightfalse}
@@ -58,7 +96,8 @@
 \DeclareOption{fleqn}{\input{fleqn.clo}}
 \DeclareOption{openbib}{\@openbibtrue}
 \DeclareOption{arabic}{\@arabictrue}
-\ExecuteOptions{11pt,oneside,final,openany}
+%% As of June 2013, UAF theses are Two-sided, opening right. So, these are our default options.
+\ExecuteOptions{11pt,twoside,final,openright}
 \ProcessOptions
 
 %% too lazy to deconvolve columnar options, so hard-wired to onecolumn!
@@ -89,9 +128,12 @@
 \renewcommand\dbltopfraction{.7}
 \renewcommand\dblfloatpagefraction{.5}
 
-%% We need a degree!
-\def\@department{Department of Physics}
-\def\department#1{\gdef\@department{#1}}
+%% need this, because UAF wants blank pages to remain virginal and unnumbered.
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+    \hbox{}
+    \thispagestyle{empty}
+    \newpage
+    \if@twocolumn\hbox{}\newpage\fi\fi\fi}
 
 %% declarations used to declare arguments needed for the 
 %% construction of the front matter.  
@@ -108,33 +150,37 @@
 %%    CHAIR IN THIS NUMBER! 
 \def\@numberofmembers{3}
 \def\numberofmembers#1{\gdef\@numberofmembers{#1}}
+%%   The name of your department
+\def\department#1{\gdef\@department{#1}}
 %%   The name of your college or school
 \def\college#1{\gdef\@college{#1}}
-%%   The width of committee signature lines
-\def\@committeewidth{3in}
-\def\committeewidth#1{\gdef\@committeewidth{#1}}
-%%   The width of approval signature and date lines
-\def\@approvedwidth{3.75in}
-\def\approvedwidth#1{\gdef\@approvedwidth{#1}}
-%%   The space between "RECOMMENDED:" and the committee signature lines
-\def\@comitteespace{\hfill}
-\def\comitteespace#1{\gdef\@comitteespace{#1}}
-%%   The space between "APPROVED:" and the approval lines
-\def\@approvedspace{\hspace{0.75in}}
-\def\approvedspace#1{\gdef\@approvedspace{#1}}
+%%   The names of your committee members, the Chair of the Department, the Dean of the College,
+%%	and the Dean of the Graduate School. Be sure to spell names right, and include titles.
+\def\gsdean#1{\gdef\@gsdean{#1}} % the grad school dean's name 
+\def\colldean#1{\gdef\@colldean{#1}} % the dean of the college's name 
+\def\depchair#1{\gdef\@depchair{#1}} % the department chair's name
+\def\commchair#1{\gdef\@commchair{#1}} % the committee chair's name
 
+%% This isn't elegant, but I don't care. Only use as many as you have to.
+%% Since we're only going up to 6 committee members total, we only have 5 non-advisors.
+\def\comone#1{\gdef\@comone{#1}}
+\def\comtwo#1{\gdef\@comtwo{#1}}
+\def\comthree#1{\gdef\@comthree{#1}}
+\def\comfour#1{\gdef\@comfour{#1}}
+\def\comfive #1{\gdef\@comfive{#1}}
 
 %% \maketitle makes titlepage. requires all the above macros 
+%% page gets set to 3
 \def\maketitle{
 {   \let\footnotesize\small
     \let\footnoterule\relax
     \if@arabic\relax\else\renewcommand{\thepage}{\roman{page}}\fi
-    \setcounter{page}{2} 
+    \setcounter{page}{3} 
     \thispagestyle{empty}
-    \addcontentsline{toc}{section}{\titlename}
+    \addcontentsline{toc}{frontchapter}{\titlename}
     \null\vfill
   \begin{center}
-    {\bfseries {\expandafter\uppercase\expandafter{\@title}} \par}
+    { {\expandafter\uppercase\expandafter{\@title}} \par}
     \bigskip \bigskip \medskip 
         A \par 
         \medskip 
@@ -160,7 +206,8 @@
   \end{center}
     \vfill\null
 \setcounter{footnote}{0}
-}\newpage}
+}\newpage \thispagestyle{empty}~ %a blank page that will serve as the back of the title page
+\newpage}
 
 %% The \makesig macro emits a UAF-approved signature page ready for
 %% your committee's signature.  requires the the \title, \author, and
@@ -170,9 +217,10 @@
 \setcounter{page}{1}
 \thispagestyle{empty}
 \if@arabic\relax\else\renewcommand{\thepage}{\roman{page}}\fi
-\addcontentsline{toc}{section}{\signame}
+\addcontentsline{toc}{frontchapter}{\signame}
+
 \begin{center}
-    {\large \bfseries {\expandafter\uppercase\expandafter{\@title}} \par}
+    { \large {\expandafter\uppercase\expandafter{\@title}} \par}
     \bigskip \bigskip
     By \par
     \bigskip \bigskip
@@ -180,67 +228,129 @@
     \bigskip \bigskip \medskip
 \vspace{.25in}
 \end{center}
-RECOMMENDED:\@comitteespace
-\begin{minipage}[t]{\@committeewidth}
-    \rule{\@committeewidth}{.05mm}\vskip2.5ex\relax
-    \rule{\@committeewidth}{.05mm}
-    \vskip2.5ex\relax
-    \rule{\@committeewidth}{.05mm}
-    \vskip2.5ex\relax
-    \ifnum \@numberofmembers = 3
-    \vskip-3.5ex\relax
-    \relax Advisory Committee Chair \vskip2.5ex
-    \fi
-    \ifnum \@numberofmembers = 4
-    \rule{\@committeewidth}{.05mm}
-    \vskip-1ex\relax
-    \relax Advisory Committee Chair \vskip2.5ex
-    \fi
-    \ifnum \@numberofmembers = 5
-    \rule{\@committeewidth}{.05mm}
-    \vskip2.5ex\relax
-    \rule{\@committeewidth}{.05mm}
-    \vskip-1ex\relax
-    \relax Advisory Committee Chair \vskip2.5ex
-    \fi
-    \ifnum \@numberofmembers = 6
-    \rule{\@committeewidth}{.05mm}
-    \vskip2.5ex\relax
-    \rule{\@committeewidth}{.05mm}
-    \vskip2.5ex\relax
-    \rule{\@committeewidth}{.05mm}
-    \vskip-1ex\relax
-    \relax Advisory Committee Chair \vskip2.5ex
-    \fi
-    \rule{\@committeewidth}{.05mm}
-    \vskip-1ex\relax
-    \relax Chair, \@department
-\end{minipage}
-\bigskip \bigskip \bigskip \par
-%\noindent APPROVED: \@approvedspace
-\noindent APPROVED: \@approvedspace
-\begin{minipage}[t]{\@approvedwidth}
-    \rule{\@approvedwidth}{.05mm}
-    \vskip-1ex\relax
-    Dean, {\@college}
-    \vskip2.5ex\relax
-    \rule{\@approvedwidth}{.05mm}
-    \vskip-1ex\relax
-    Dean of the Graduate School
-    \vskip2.5ex\relax
-    \rule{\@approvedwidth}{.05mm}
-    \vskip-1ex\relax
-    Date
-\end{minipage}
-\newpage
-}
 
-%% the abstract goes here and gets its page set to 3, as req'd (note:
+\noindent\hspace{.25in}RECOMMENDED:\hspace{.45in}\rule{3.75in}{.05mm}\hspace{.25in}\vskip2.5ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip2.5ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip2.5ex\relax
+
+\ifnum \@numberofmembers = 3
+\vskip-3.5ex\relax
+\noindent\hskip2in\relax Advisory Committee Chair \vskip2.5ex
+\fi
+
+\ifnum \@numberofmembers = 4
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hskip2in\relax Advisory Committee Chair \vskip2.5ex
+\fi
+
+\ifnum \@numberofmembers = 5
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip2.5ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hskip2in\relax Advisory Committee Chair \vskip2.5ex
+\fi
+
+\ifnum \@numberofmembers = 6
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip2.5ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip2.5ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hskip2in\relax Advisory Committee Chair \vskip2.5ex
+\fi
+%% here's where we put the chair of the department
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}
+\vskip-1ex\relax\noindent\hskip2in\relax Chair, Department of {\@department} \vskip1.5ex
+
+\bigskip \bigskip \par
+
+\noindent\hspace{.25in}APPROVED: \hspace{.8in} \rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }Dean, {\@college}\hspace{.25in}\vskip2.5ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }Dean of the Graduate School\hspace{.25in}\vskip2.5ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }Date
+\newpage \thispagestyle{empty}~ % a blank page that serves as the backside of the signature page
+\newpage}
+
+%% The \makenamedsig macro emits a UAF-approved signature page ready for
+%% your committee's signature, with committee member names printed under each line.
+%% This requires that the \title, \author, and \college macros have been defined,
+%% and of course names for all parties (see above for the macro names)
+%% (this bastard finally is independent of the font you choose for the thesis!)
+%% It's also independent of department! Woo!
+\def\makenamedsig{
+\setcounter{page}{1}
+\thispagestyle{empty}
+\if@arabic\relax\else\renewcommand{\thepage}{\roman{page}}\fi
+\addcontentsline{toc}{frontchapter}{\signame}
+
+\begin{center}
+    { \large {\expandafter\uppercase\expandafter{\@title}} \par}
+    \bigskip \bigskip
+    By \par
+    \bigskip \bigskip
+    {\@author} \par
+    \bigskip  \medskip
+\vspace{.25in}
+\end{center}
+
+\noindent\hspace{.25in}RECOMMENDED:\hspace{.45in}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hskip2in{\@comone}\relax\vskip1.5ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hskip2in{\@comtwo}\relax\vskip1.5ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hskip2in{\@comthree}\relax\vskip1.5ex\relax
+
+\ifnum \@numberofmembers = 3
+\vskip-3ex\relax\noindent\hskip2in\relax{\@commchair}\relax\vskip-1ex\relax
+\noindent\hskip2in\relax Advisory Committee Chair \vskip2.5ex
+\fi
+
+\ifnum \@numberofmembers = 4
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hskip2in\relax{\@commchair}\relax\vskip-1ex\relax
+\noindent\hskip2in\relax Advisory Committee Chair \vskip2.5ex
+\fi
+
+\ifnum \@numberofmembers = 5
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hskip2in{\@comfour}\relax\vskip1.5ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hskip2in\relax{\@commchair}\relax\vskip-1ex\relax
+\noindent\hskip2in\relax Advisory Committee Chair \vskip2.5ex
+\fi
+
+\ifnum \@numberofmembers = 6
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hskip2in{\@comfour}\relax\vskip1.5ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hskip2in{\@comfive}\relax\vskip1.5ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hskip2in\relax{\@commchair}\relax\vskip-1ex
+\noindent\hskip2in\relax Advisory Committee Chair \vskip2.5ex
+\fi
+
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}
+\vskip-1ex\relax\noindent\hskip2in\relax{\@depchair}\relax
+\vskip-1ex\relax\noindent\hskip2in\relax Chair, Department of {\@department} \vskip1.5ex
+
+\bigskip \bigskip \par
+
+\noindent\hspace{.25in}APPROVED: \hspace{.8in} \rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }{\@colldean}\relax\vskip-1ex
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }Dean, {\@college}\hspace{.25in}\vskip2.5ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }{\@gsdean}\relax\vskip-1ex
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }Dean of the Graduate School\hspace{.25in}\vskip2.5ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }Date
+\newpage \thispagestyle{empty}~ % a blank page that serves as the backside of the signature page
+\newpage}
+
+%% the abstract goes here and gets its page set to 5, as req'd (note:
 %% abstract and acknowledgements are frontschap's --> defined later)
 \newenvironment{abstract}{
 \if@arabic\relax\else\renewcommand{\thepage}{\roman{page}}\fi
-\setcounter{page}{3}\frontchap*{\abstractname}
-\addcontentsline{toc}{section}{\abstractname}
+\setcounter{page}{5}\frontchap*{\abstractname}
+\addcontentsline{toc}{frontchapter}{\abstractname}
 }
 {\newpage\renewcommand{\thepage}{\arabic{page}}}
 
@@ -248,7 +358,7 @@ RECOMMENDED:\@comitteespace
 \newenvironment{acknowledgements}
 {
 \if@arabic\relax\else\renewcommand{\thepage}{\roman{page}}\fi
-\newpage\addcontentsline{toc}{section}{\acknowledgename}
+\newpage\addcontentsline{toc}{frontchapter}{\acknowledgename}
 \frontchap*{\acknowledgename}
 }
 {\newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -266,7 +376,7 @@ RECOMMENDED:\@comitteespace
 \newenvironment{preface}
 {
 \if@arabic\relax\else\renewcommand{\thepage}{\roman{page}}\fi
-\newpage\addcontentsline{toc}{section}{\prefname}
+\newpage\addcontentsline{toc}{frontchapter}{\prefname}
 \frontchap*{\prefname}
 }
 {\newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -277,7 +387,7 @@ RECOMMENDED:\@comitteespace
 {
 %\if@arabic\relax\else\renewcommand{\thepage}{\roman{page}}\fi
 %%\newpage\addcontentsline{toc}{section}{\indname}
-\newpage\addcontentsline{toc}{section}{\indname}
+\newpage\addcontentsline{toc}{frontchapter}{\indname}
 %%\frontchap*{\prefname}
 }
 %%{\newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -315,6 +425,7 @@ RECOMMENDED:\@comitteespace
     \let\chaptermark\@gobble
     \let\sectionmark\@gobble
     }
+
 \newcommand\chaptermark[1]{}
 \setcounter{secnumdepth}{2}
 \newcounter {part}
@@ -374,6 +485,70 @@ RECOMMENDED:\@comitteespace
               \if@tempswa
                 \twocolumn
               \fi}
+%% God bless the person at 
+%% http://theoval.sys.uea.ac.uk/~nlct/latex/thesis/node8.html
+%% Essentially, to add the word 'Page' right aligned on the
+%% same line as 'Table of Contents' we have to some of this.
+%% The upshot is that I will define a new \chapteruaf, \schapteruaf,
+%% and \@makeschapterheaduaf.
+%%
+%%    The first argument to \secdef tells LATEX what to do if
+%%    the unstarred version is used, and the second argument
+%%    tells LATEX what to do if the starred version is used. So
+%%    the command
+%%     \chapter{Introduction}
+%%    will use the command \@chapter, whereas the command
+%%     \chapter*{Acknowledgements}
+%%    will use the command \@schapter. The commands \@chapter
+%%    and \@schapter use the commands \@makechapterhead and
+%%    \@makeschapterhead, respectively, to format the chapter
+%%    heading, so if you want to change the chapter format, you
+%%    will need to redefine the commands \@makechapterhead and
+%%    \@makeschapterhead. The easiest way to do this is to look
+%%    for the code for these commands in report.cls and copy
+%%    them over to your new class file, mythesis, described
+%%    earlier, and edit the appropriate formatting commands.
+%%
+%% This is a total hack, but to maintain 'Table of Contents' in
+%% center of page and to position 'Page' correctly, I had to
+%% use vspace and hspace through trial and error until it looked
+%% correct.  If you print it out and hold a ruler to the lines
+%% and margins, it should be pretty good.  But if you do not like
+%% it then you can change the hspace and vspace arguments by
+%% a whee little bit.
+%%
+%% Updated to use flushright environment, which will keep it 
+%%
+
+\newcommand\chapteruaf{
+\if@arabic\relax\else\if@chapterone\setcounter{page}{1}\else\relax\fi\fi
+\@chapteronefalse
+                    %\if@openright\cleardoublepage\else\clearpage\fi
+			\clearpage
+                    \thispagestyle{myheadings}%
+                    \global\@topnum\z@
+                    \@afterindentfalse
+                    \secdef\@chapter\@schapteruaf}
+\def\@schapteruaf#1{\if@twocolumn
+                   \@topnewpage[\@makeschapterheaduaf{#1}]%
+		   \@afterheading
+                 \else
+                   \@makeschapterheaduaf{#1}%
+                   \@afterheading
+                 \fi}
+
+\def\@makeschapterheaduaf#1{%
+  {\parindent \z@ \centering
+    \reset@font
+    \normalsize %\bfseries  
+	\textbf{#1}\par
+    %\vspace{-18.3pt}
+	%\hspace{143mm} 
+	\begin{flushright}Page\end{flushright}\vspace*{-13.3pt}
+    \nobreak
+  }
+}
+
 \newcommand\chapter{
 \if@arabic\relax\else\if@chapterone\setcounter{page}{1}\else\relax\fi\fi
 \@chapteronefalse
@@ -391,10 +566,10 @@ RECOMMENDED:\@comitteespace
                       \addcontentsline{toc}{chapter}{#1}
                     \fi
                     \chaptermark{#1}%
-                    \addtocontents{lof}{\protect\addvspace{10\p@}}%
-                    \addtocontents{lot}{\protect\addvspace{10\p@}}%
-                    \addtocontents{lom}{\protect\addvspace{10\p@}}%
-                    \addtocontents{loa}{\protect\addvspace{10\p@}}%
+                    \addtocontents{lof}{\protect\vspace{10\p@}}%
+                    \addtocontents{lot}{\protect\vspace{10\p@}}%
+                    \addtocontents{lom}{\protect\vspace{10\p@}}%
+                    \addtocontents{loa}{\protect\vspace{10\p@}}%
                     \if@twocolumn
                       \@topnewpage[\@makechapterhead{#2}]%
                     \else
@@ -439,10 +614,10 @@ RECOMMENDED:\@comitteespace
                       \addcontentsline{toc}{frontchap}{#1}
                     \fi
                     \frontchapmark{#1}%
-                    \addtocontents{lof}{\protect\addvspace{10\p@}}%
-                    \addtocontents{lot}{\protect\addvspace{10\p@}}%
-                    \addtocontents{lom}{\protect\addvspace{10\p@}}%
-                    \addtocontents{loa}{\protect\addvspace{10\p@}}%
+                    \addtocontents{lof}{\protect\vspace{10\p@}}%
+                    \addtocontents{lom}{\protect\vspace{10\p@}}%
+                    \addtocontents{lot}{\protect\vspace{10\p@}}%
+                    \addtocontents{loa}{\protect\vspace{10\p@}}%
                     \if@twocolumn
                       \@topnewpage[\@makefrontchaphead{#2}]%
                     \else
@@ -474,6 +649,44 @@ RECOMMENDED:\@comitteespace
     \nobreak
 %%    \vskip 40\p@
   }}
+
+\newcommand{\appchapter}[1]{\if@openright\cleardoublepage\else\clearpage\fi
+                    \thispagestyle{myheadings}%
+	\ifnum \c@secnumdepth >\m@ne
+                         \refstepcounter{chapter}%
+		 \begin{center} \bfseries Appendix\space\thechapter \\ #1 \end{center}
+                          \addcontentsline{loa}{frontchapter}%
+                                   {Appendix \protect\numberline{\thechapter}#1}%
+        \else
+                 \addcontentsline{loa}{frontchapter}{Appendix \protect\numberline{\thechapter}#1}
+	\fi
+	
+	\setcounter{section}{0}
+    	%\begin{center}\normalsize\bfseries
+	%	Appendix \thechapter \\ #1 \end{center}
+	%\addcontentsline{loa}{frontchapter}{Appendix \protect\numberline{\thechapter} #1}
+	%\ifnum \c@secnumdepth >\m@ne
+	%	\stepcounter{chapter}\setcounter{section}{1}
+}
+\newcommand{\appsection}[1]{% addcontents line to loa, not toc; left justified, bold, etc.
+	\refstepcounter{section}
+		\begin{flushleft} \bfseries {\thesection\protect\space\space}#1 \end{flushleft}
+			\addcontentsline{loa}{section}{\protect\numberline{\thesection}#1}
+	\setcounter{subsection}{0}
+}
+\newcommand{\appsubsection}[1]{
+	\refstepcounter{subsection}
+	\begin{flushleft} \bfseries {\thesubsection\protect\space\space}#1 \end{flushleft}
+	\addcontentsline{loa}{subsection}{\protect\numberline{\thesubsection} #1}
+	\setcounter{subsubsection}{0}
+}
+\newcommand{\appsubsubsection}[1]{
+	\refstepcounter{subsubsection}
+	\begin{flushleft} \bfseries {\thesubsubsection\protect\space\space}#1 \end{flushleft}
+	\addcontentsline{loa}{subsection}{\protect\numberline{\thesubsubsection} #1}
+	
+}
+
 \newcommand\section{\@startsection {section}{1}{\z@}%
                                    {-3.5ex \@plus -1ex \@minus -.2ex}%
                                    {0.1ex }%
@@ -559,9 +772,10 @@ RECOMMENDED:\@comitteespace
                {\endlist}
 \newcommand\appendix{\par
   \setcounter{chapter}{0}%
-  \setcounter{section}{0}%
+  %\setcounter{section}{1}%
   \renewcommand\@chapapp{\appendixname}%
-  \renewcommand\thechapter{\Alph{chapter}}}
+  \renewcommand\thechapter{\Alph{chapter}}
+  \addcontentsline{toc}{frontchapter}{Appendix}}
 \setlength\arraycolsep{5\p@}
 \setlength\tabcolsep{6\p@}
 \setlength\arrayrulewidth{.4\p@}
@@ -624,21 +838,25 @@ RECOMMENDED:\@comitteespace
 \newcommand\@tocrmarg {2.55em}
 \newcommand\@dotsep{4.5}
 \setcounter{tocdepth}{2}
+
 \newcommand\tableofcontents{%
     \@chapteronefalse
     \if@arabic\relax\else\renewcommand{\thepage}{\roman{page}}\fi
-  \newpage\addcontentsline{toc}{section}{\contentsname}  %added by LEif
+  \newpage%\addcontentsline{toc}{chapter}{\contentsname}  %added by LEif
+	
     \if@twocolumn
       \@restonecoltrue\onecolumn
     \else
       \@restonecolfalse
     \fi
-    \chapter*{\contentsname
+    \chapteruaf*{\contentsname
         \@mkboth{\uppercase{\contentsname}}{\uppercase{\contentsname}}}%
     \@chapteronetrue
-    \@starttoc{toc}%
+    %\cftaftertoctitle
+    \@starttoc{toc} 
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
+
 \newcommand\l@part[2]{%
   \ifnum \c@tocdepth >-2\relax
     \addpenalty{-\@highpenalty}%
@@ -656,17 +874,56 @@ RECOMMENDED:\@comitteespace
   \fi}
 \newcommand\l@chapter[2]{%
   \ifnum \c@tocdepth >\m@ne
-    \addpenalty{-\@highpenalty}%
+%    \addpenalty{-\@highpenalty}%
     \setlength\@tempdima{1.5em}%
-    \begingroup
-      \parindent \z@ \rightskip \@pnumwidth
-      \parfillskip -\@pnumwidth
-      \leavevmode \bfseries
-      \advance\leftskip\@tempdima
-      \hskip -\leftskip
-      #1\nobreak\hfil \nobreak\hbox to\@pnumwidth{\hss #2}\par
-      \penalty\@highpenalty
-    \endgroup
+%    \begingroup
+%      \parindent \z@ \rightskip \@pnumwidth
+%      \parfillskip -\@pnumwidth
+%      \leavevmode \bfseries
+%     \advance\leftskip\@tempdima
+%      \hskip -\leftskip
+	\begingroup
+	\bfseries
+      {\@dottedtocline{0}{0.0em}{1.5em}{Chapter #1}{\textbf{#2}}}
+	\endgroup
+%#1\nobreak\hfil \nobreak\hbox to\@pnumwidth{\hss #2}\par
+%      \penalty\@highpenalty  
+%    \endgroup
+  \fi}
+\newcommand\l@frontchapter[2]{%
+  \ifnum \c@tocdepth >\m@ne
+%    \addpenalty{-\@highpenalty}%
+    \setlength\@tempdima{1.5em}%
+%    \begingroup
+%      \parindent \z@ \rightskip \@pnumwidth
+%      \parfillskip -\@pnumwidth
+%      \leavevmode \bfseries
+%     \advance\leftskip\@tempdima
+%      \hskip -\leftskip
+	\begingroup
+	\bfseries
+      {\@dottedtocline{0}{0.0em}{1.5em}{#1}{\textbf{#2}}}
+	\endgroup
+%#1\nobreak\hfil \nobreak\hbox to\@pnumwidth{\hss #2}\par
+%      \penalty\@highpenalty  
+%    \endgroup
+  \fi}
+\newcommand\l@appendix[2]{%
+  \ifnum \c@tocdepth >\m@ne
+%    \addpenalty{-\@highpenalty}%
+    \setlength\@tempdima{1.5em}%
+%    \begingroup
+%      \parindent \z@ \rightskip \@pnumwidth
+%      \parfillskip -\@pnumwidth
+%      \leavevmode \bfseries
+%     \advance\leftskip\@tempdima
+%      \hskip -\leftskip
+	\begingroup
+      {\@dottedtocline{0}{0.0em}{1.5em}{Appendix #1}{{#2}}}
+	\endgroup
+%#1\nobreak\hfil \nobreak\hbox to\@pnumwidth{\hss #2}\par
+%      \penalty\@highpenalty  
+%    \endgroup
   \fi}
 \newcommand\l@section      {\@dottedtocline{1}{1.5em}{2.3em}}
 \newcommand\l@subsection   {\@dottedtocline{2}{3.8em}{3.2em}}
@@ -681,12 +938,13 @@ RECOMMENDED:\@comitteespace
     \else
       \@restonecolfalse
     \fi
-    \chapter*{\listappname
+    \chapteruaf*{\listappname
       \@mkboth{\uppercase{\listappname}}%
               {\uppercase{\listappname}}}%
     \@chapteronetrue
     %% get this in contents as a section
-    \addcontentsline{toc}{section}{\listappname}
+    \addcontentsline{toc}{frontchapter}{\listappname}
+    %\cftafterloftitle
     \@starttoc{loa}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -698,12 +956,13 @@ RECOMMENDED:\@comitteespace
     \else
       \@restonecolfalse
     \fi
-    \chapter*{\listothermatname
+    \chapteruaf*{\listothermatname
       \@mkboth{\uppercase{\listothermatname}}%
               {\uppercase{\listothermatname}}}%
     \@chapteronetrue
     %% get this in contents as a section
-    \addcontentsline{toc}{section}{\listothermatname}
+    \addcontentsline{toc}{frontchapter}{\listothermatname}
+    %\cftafterloftitle
     \@starttoc{lom}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -715,12 +974,13 @@ RECOMMENDED:\@comitteespace
     \else
       \@restonecolfalse
     \fi
-    \chapter*{\listfigurename
+    \chapteruaf*{\listfigurename
       \@mkboth{\uppercase{\listfigurename}}%
               {\uppercase{\listfigurename}}}%
     \@chapteronetrue
     %% get this in contents as a section
-    \addcontentsline{toc}{section}{\listfigurename}
+    \addcontentsline{toc}{frontchapter}{\listfigurename}
+    %\cftafterloftitle
     \@starttoc{lof}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -733,11 +993,12 @@ RECOMMENDED:\@comitteespace
     \else
       \@restonecolfalse
     \fi
-    \chapter*{\listtablename
+    \chapteruaf*{\listtablename
       \@mkboth{\uppercase{\listtablename}}{\uppercase{\listtablename}}}%
     %% get this in contents as a section
     \@chapteronetrue
-    \addcontentsline{toc}{section}{\listtablename}
+    \addcontentsline{toc}{frontchapter}{\listtablename}
+    %\cftafterloftitle
     \@starttoc{lot}%
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
@@ -745,10 +1006,9 @@ RECOMMENDED:\@comitteespace
 \newdimen\bibindent
 \bibindent=1.5em
 \newenvironment{thebibliography}[1]
-     {
-      \chapter*{\bibname
-        \@mkboth{\uppercase{\bibname}}{\uppercase{\bibname}}
-        }%
+     {\section{\bibname
+	\addcontentsline{toc}{section}{\bibname}        
+	\@mkboth{\uppercase{\bibname}}{\uppercase{\bibname}}}%
       \list{\@biblabel{\arabic{enumiv}}}%
            {\settowidth\labelwidth{\@biblabel{#1}}%
             \leftmargin\labelwidth
@@ -768,9 +1028,7 @@ RECOMMENDED:\@comitteespace
         \renewcommand\newblock{\hskip .11em \@plus.33em \@minus.07em}%
       \fi
       \sloppy\clubpenalty4000\widowpenalty4000%
-      \sfcode`\.=\@m
-      \@pageheadingtrue
-      }
+      \sfcode`\.=\@m}
      {\def\@noitemerr
        {\@latex@warning{Empty `thebibliography' environment}}%
       \endlist}
@@ -814,7 +1072,9 @@ RECOMMENDED:\@comitteespace
     {\rule{\z@}{\footnotesep}\ignorespaces
       #1\strut}}}
 
+
 %% change names here if'n you'd rather call 'em by a different name
+\newcommand\contentsnameblah{Blah of Contents}
 \newcommand\contentsname{Table of Contents}
 \newcommand\signame{Signature Page}
 \newcommand\titlename{Title Page}
@@ -822,7 +1082,7 @@ RECOMMENDED:\@comitteespace
 \newcommand\listtablename{List of Tables}
 \newcommand\listothermatname{List of Other Materials}
 \newcommand\listappname{List of Appendices}
-\newcommand\bibname{Bibliography}
+\newcommand\bibname{References}
 \newcommand\indexname{Index}
 \newcommand\figurename{Figure}
 \newcommand\tablename{Table}
@@ -834,10 +1094,10 @@ RECOMMENDED:\@comitteespace
 \newcommand\prefname{Preface}
 \newcommand\indname{Index}
 
-%% get bibliography in contents as a chapter (robustly)
+%% get bibliography in contents as a section (robustly)
 \renewcommand\bibliography[1]{
         \newpage
-                \addcontentsline{toc}{chapter}{\bibname}
+                \addcontentsline{toc}{section}{\bibname}
 \if@filesw
   \immediate\write\@auxout{\string\bibdata{#1}}\fi
   \@input@{\jobname.bbl}}
@@ -865,7 +1125,7 @@ RECOMMENDED:\@comitteespace
 
 %% here's where we meet the page layout requirements of the grad school
 \oddsidemargin 0.5in   %   Note that \oddsidemargin = \evensidemargin
-   \evensidemargin 0.5in
+   \evensidemargin 0.0in
    \marginparwidth 0pt
 \marginparsep 10pt      % Horizontal space between outer margin and 
                         % marginal note
@@ -877,7 +1137,7 @@ RECOMMENDED:\@comitteespace
                         % Bottom of page:
 \footskip 30pt          %    Distance from baseline of box containing
                         %    foot to baseline of last line of text.
-\textheight = 8.0truein
+\textheight = 8.5truein
 %\advance\textheight by \topskip
 \textwidth 6.0truein     % Width of text line.
                          % For two-column mode: 
