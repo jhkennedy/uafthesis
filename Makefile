@@ -1,6 +1,6 @@
 example.pdf:
 	@echo "-> building example.pdf..."
-	@cd example && ./build.sh > /dev/null
+	@cd example && ./build.sh
 	@mv example/example.pdf ./
 
 clear:
