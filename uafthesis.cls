@@ -19,6 +19,13 @@
 %%
 %%  Edited by Jesse Frey 2012/12/6
 %%        Messed with the signature page some of us need longer lines
+%%
+%%  Edited by Joshua Holbrook 2013/12/31
+%%        Incorporated fixes from Bob McNabb 2013/6/18:
+%%
+%%        * uafthesis is now 2-sided, opening right.
+%%        * Add line numbers to draft versions
+%%
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{uafthesis}
@@ -44,13 +51,24 @@
 \addtocontents{lof}{~\hfill \textbf{Page}\par}
 \addtocontents{lom}{~\hfill \textbf{Page}\par}
 
+%% Add a blank page
+\newcommand{\blankpage}{
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+}
+
+%% Two of them!
+\newcommand{\flypage}{\blankpage\blankpage}
+
 %% options have been reduced to what is reasonable for a uaf thesis
 \DeclareOption{10pt}{\renewcommand\@ptsize{0}}
 \DeclareOption{11pt}{\renewcommand\@ptsize{1}}
 \DeclareOption{12pt}{\renewcommand\@ptsize{2}}
 \DeclareOption{oneside}{\@twosidefalse \@mparswitchfalse}
 \DeclareOption{twoside}{\@twosidetrue  \@mparswitchtrue}
-\DeclareOption{draft}{\setlength\overfullrule{5pt}}
+\DeclareOption{draft}{\setlength\overfullrule{5pt}\linenumbers\modulolinenumbers[5]}
 \DeclareOption{final}{\setlength\overfullrule{0pt}}
 \DeclareOption{openright}{\@openrighttrue}
 \DeclareOption{openany}{\@openrightfalse}
@@ -58,7 +76,7 @@
 \DeclareOption{fleqn}{\input{fleqn.clo}}
 \DeclareOption{openbib}{\@openbibtrue}
 \DeclareOption{arabic}{\@arabictrue}
-\ExecuteOptions{11pt,oneside,final,openany}
+\ExecuteOptions{11pt,twoside,final,openright}
 \ProcessOptions
 
 %% too lazy to deconvolve columnar options, so hard-wired to onecolumn!
@@ -92,6 +110,14 @@
 %% We need a degree!
 \def\@department{Department of Physics}
 \def\department#1{\gdef\@department{#1}}
+
+%% Used to make blank pages nice and clean
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+    \hbox{}
+    \thispagestyle{empty}
+    \newpage
+    \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+
 
 %% declarations used to declare arguments needed for the 
 %% construction of the front matter.  
