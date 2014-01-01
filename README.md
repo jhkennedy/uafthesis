@@ -60,6 +60,7 @@ another way of updating the class file.
 * **Ryan Woodard**           2 December 2004
 * **Joshua Holbrook**        2010 -- present
 * **Jesse Frey**            10 December 2012
+* **Robert McNabb**          6 June 2013
 
 ## Licensing
 
