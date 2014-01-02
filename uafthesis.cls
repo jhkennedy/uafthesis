@@ -891,7 +891,7 @@ RECOMMENDED:\@comitteespace
 
 %% here's where we meet the page layout requirements of the grad school
 \oddsidemargin 0.5in   %   Note that \oddsidemargin = \evensidemargin
-   \evensidemargin 0.5in
+   \evensidemargin 0.0in
    \marginparwidth 0pt
 \marginparsep 10pt      % Horizontal space between outer margin and 
                         % marginal note
@@ -903,7 +903,7 @@ RECOMMENDED:\@comitteespace
                         % Bottom of page:
 \footskip 30pt          %    Distance from baseline of box containing
                         %    foot to baseline of last line of text.
-\textheight = 8.0truein
+\textheight = 8.5truein
 %\advance\textheight by \topskip
 \textwidth 6.0truein     % Width of text line.
                          % For two-column mode: 
