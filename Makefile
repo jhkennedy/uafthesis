@@ -1,4 +1,4 @@
-example.pdf:
+example.pdf: uafthesis.cls
 	@echo "-> building example.pdf..."
 	@cd example && ./build.sh
 	@mv example/example.pdf ./
