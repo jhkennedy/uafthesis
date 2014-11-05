@@ -66,6 +66,8 @@
 \newif\if@openbib
 \newif\if@arabic
 \newif\if@chapterone
+\newif\if@phd
+\@phdfalse
 \@chapteronetrue
 \@arabicfalse
 \@openbibfalse
@@ -96,6 +98,7 @@
 \DeclareOption{fleqn}{\input{fleqn.clo}}
 \DeclareOption{openbib}{\@openbibtrue}
 \DeclareOption{arabic}{\@arabictrue}
+\DeclareOption{phd}{\@phdtrue}
 %% As of June 2013, UAF theses are Two-sided, opening right. So, these are our default options.
 \ExecuteOptions{11pt,twoside,final,openright}
 \ProcessOptions
@@ -184,7 +187,7 @@
     \bigskip \bigskip \medskip
         A \par
         \medskip
-        DISSERTATION \par
+        \if@phd DISSERTATION \else THESIS \fi \par
     \bigskip \bigskip \medskip
         Presented to the Faculty \par
         \medskip
