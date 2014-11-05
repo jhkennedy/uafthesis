@@ -1,5 +1,5 @@
 %% uafthesis.cls -- curt a.l. szuberla  1996/11/13
-%% 
+%%
 %%        produces a UAF approved thesis format; kludged from the
 %%        std. latex2e report.cls and from ucthesis.cls; uses many
 %%        features of the former and is not so complex as the
@@ -18,39 +18,39 @@
 %%        of Contents, List of Figures, etc.
 %%
 %%  Edited by Bob McNabb 2013/6/18 (s/t Ronni Grapenthin)
-%%	  Changed "chapter" Table of Contents entry to include bold dots,
-%%		and include the word "Chapter" before the chapter number. Also
-%%		changed the spacing so that it's more like the GS's example
-%%	  Added "frontchapter" Table of Contents entry to do the exact same thing
-%%		as the "chapter" entry, but without the word "Chapter" in the ToC
-%%	  Included \flypage, to insert the required blank pages at the beginning (and end)
-%%		of everything. YOU WILL HAVE TO INSERT THESE IN YOUR thesis.tex FILE, before
-%%		\makesig, and just before \end{document}. The good news is, they don't mess up the
-%%		page counting. 
-%%	  Removed "Table of Contents" entry from the Table of Contents,
-%%	  	because this is just way too meta to think about.
-%%	  Changed default options to reflect current whims of graduate school, including margins and all
-%%		that jazz.
-%%	  NB: The chapteruaf* hack below will only add "page" to the top of the FIRST page of the ToC, etc.
-%%		If the present incarnation of Holy Mother Graduate School requires "page" on EACH
-%%		page of the ToC, etc., then insert the following line into your actual thesis.tex file:
-%%			\addtocontents{toc}{\protect\afterpage{~\hfill{Page}\par\medskip}} % for the toc
-%%			\addtocontents{lof}{\protect\afterpage{~\hfill{Page}\par\medskip}} % for the lof
-%%		If your thesis is table-heavy (or appendix, extra material, whatever) for some reason, 
-%%		change {lof} to {lot}, etc.You will probably have to play around with it some,
-%%		but the following locations worked for me:
-%%			{toc} after the acknowledgements
-%%			{lof} and {toc} after Chapter 2 (first "real" chapter)
-%%		This is a semi ugly hack, but it gets results, and will hopefully spare you the pain that I
-%%			(and others) have suffered.
-%%	  Added "Department" as a variable, thus removing the hard-wired "Physics" option.
-%%	  Futzed with spacing on sig page, now all lines are aligned and the same length, so that no one feels
-%%		inadequate. Also added a second \makesig macro (\makenamedsig), which puts the names that you specify
-%%		on the page. This is not required by the Grad school, but it looks nice. Just pray that the Dept. Chair
-%%		isn't out of town when you turn in your thesis.
+%%    Changed "chapter" Table of Contents entry to include bold dots,
+%%      and include the word "Chapter" before the chapter number. Also
+%%      changed the spacing so that it's more like the GS's example
+%%    Added "frontchapter" Table of Contents entry to do the exact same thing
+%%      as the "chapter" entry, but without the word "Chapter" in the ToC
+%%    Included \flypage, to insert the required blank pages at the beginning (and end)
+%%      of everything. YOU WILL HAVE TO INSERT THESE IN YOUR thesis.tex FILE, before
+%%      \makesig, and just before \end{document}. The good news is, they don't mess up the
+%%      page counting.
+%%    Removed "Table of Contents" entry from the Table of Contents,
+%%      because this is just way too meta to think about.
+%%    Changed default options to reflect current whims of graduate school, including margins and all
+%%      that jazz.
+%%    NB: The chapteruaf* hack below will only add "page" to the top of the FIRST page of the ToC, etc.
+%%      If the present incarnation of Holy Mother Graduate School requires "page" on EACH
+%%      page of the ToC, etc., then insert the following line into your actual thesis.tex file:
+%%          \addtocontents{toc}{\protect\afterpage{~\hfill{Page}\par\medskip}} % for the toc
+%%          \addtocontents{lof}{\protect\afterpage{~\hfill{Page}\par\medskip}} % for the lof
+%%      If your thesis is table-heavy (or appendix, extra material, whatever) for some reason,
+%%      change {lof} to {lot}, etc.You will probably have to play around with it some,
+%%      but the following locations worked for me:
+%%          {toc} after the acknowledgements
+%%          {lof} and {toc} after Chapter 2 (first "real" chapter)
+%%      This is a semi ugly hack, but it gets results, and will hopefully spare you the pain that I
+%%          (and others) have suffered.
+%%    Added "Department" as a variable, thus removing the hard-wired "Physics" option.
+%%    Futzed with spacing on sig page, now all lines are aligned and the same length, so that no one feels
+%%      inadequate. Also added a second \makesig macro (\makenamedsig), which puts the names that you specify
+%%      on the page. This is not required by the Grad school, but it looks nice. Just pray that the Dept. Chair
+%%      isn't out of town when you turn in your thesis.
 
 
-\NeedsTeXFormat{LaTeX2e} 
+\NeedsTeXFormat{LaTeX2e}
 %% have to require "afterpage" to get the stupid 'Page' heading in the ToC, LoF, LoT, etc.
 \usepackage{afterpage}
 \usepackage[switch]{lineno}
@@ -70,7 +70,7 @@
 \@arabicfalse
 \@openbibfalse
 
-% inserts a totally blank page 
+% inserts a totally blank page
 \newcommand{\blankpage}{
 \newpage
 \thispagestyle{empty}
@@ -135,8 +135,8 @@
     \newpage
     \if@twocolumn\hbox{}\newpage\fi\fi\fi}
 
-%% declarations used to declare arguments needed for the 
-%% construction of the front matter.  
+%% declarations used to declare arguments needed for the
+%% construction of the front matter.
 %%   The year the degree will be officially conferred
 \def\degreeyear#1{\gdef\@degreeyear{#1}}
 %%   The month the degree will be officially conferred
@@ -147,7 +147,7 @@
 \def\prevdegrees#1{\gdef\@prevdegrees{#1}}
 %%   The number of committee members, which provides for the
 %%    correct number of lines on the signature page.  INCLUDE THE
-%%    CHAIR IN THIS NUMBER! 
+%%    CHAIR IN THIS NUMBER!
 \def\@numberofmembers{3}
 \def\numberofmembers#1{\gdef\@numberofmembers{#1}}
 %%   The name of your department
@@ -155,9 +155,9 @@
 %%   The name of your college or school
 \def\college#1{\gdef\@college{#1}}
 %%   The names of your committee members, the Chair of the Department, the Dean of the College,
-%%	and the Dean of the Graduate School. Be sure to spell names right, and include titles.
-\def\gsdean#1{\gdef\@gsdean{#1}} % the grad school dean's name 
-\def\colldean#1{\gdef\@colldean{#1}} % the dean of the college's name 
+%%  and the Dean of the Graduate School. Be sure to spell names right, and include titles.
+\def\gsdean#1{\gdef\@gsdean{#1}} % the grad school dean's name
+\def\colldean#1{\gdef\@colldean{#1}} % the dean of the college's name
 \def\depchair#1{\gdef\@depchair{#1}} % the department chair's name
 \def\commchair#1{\gdef\@commchair{#1}} % the committee chair's name
 
@@ -169,23 +169,23 @@
 \def\comfour#1{\gdef\@comfour{#1}}
 \def\comfive #1{\gdef\@comfive{#1}}
 
-%% \maketitle makes titlepage. requires all the above macros 
+%% \maketitle makes titlepage. requires all the above macros
 %% page gets set to 3
 \def\maketitle{
 {   \let\footnotesize\small
     \let\footnoterule\relax
     \if@arabic\relax\else\renewcommand{\thepage}{\roman{page}}\fi
-    \setcounter{page}{3} 
+    \setcounter{page}{3}
     \thispagestyle{empty}
     \addcontentsline{toc}{frontchapter}{\titlename}
     \null\vfill
   \begin{center}
     { {\expandafter\uppercase\expandafter{\@title}} \par}
-    \bigskip \bigskip \medskip 
-        A \par 
-        \medskip 
-        THESIS \par
-    \bigskip \bigskip \medskip 
+    \bigskip \bigskip \medskip
+        A \par
+        \medskip
+        DISSERTATION \par
+    \bigskip \bigskip \medskip
         Presented to the Faculty \par
         \medskip
         of the University of Alaska Fairbanks \par
@@ -193,15 +193,15 @@
         in Partial Fulfillment of the Requirements \par
         \medskip
         for the Degree of \par
-    \bigskip \bigskip \medskip 
+    \bigskip \bigskip \medskip
     {\expandafter\uppercase\expandafter{\@degree}} \par
-    \bigskip \bigskip \bigskip 
+    \bigskip \bigskip \bigskip
     By \par
-    \bigskip 
+    \bigskip
     {\@author}, {\@prevdegrees} \par
     \bigskip \bigskip
     Fairbanks, Alaska \par
-    \bigskip 
+    \bigskip
     {\@degreemonth} {\@degreeyear}
   \end{center}
     \vfill\null
@@ -381,7 +381,7 @@
 }
 {\newpage\renewcommand{\thepage}{\arabic{page}}}
 
-%% Index (use /index in text, 
+%% Index (use /index in text,
 %% have \begin{nindex}\printindex\end{nindex} (after Bib)
 \newenvironment{nindex}
 {
@@ -485,7 +485,7 @@
               \if@tempswa
                 \twocolumn
               \fi}
-%% God bless the person at 
+%% God bless the person at
 %% http://theoval.sys.uea.ac.uk/~nlct/latex/thesis/node8.html
 %% Essentially, to add the word 'Page' right aligned on the
 %% same line as 'Table of Contents' we have to some of this.
@@ -517,21 +517,21 @@
 %% it then you can change the hspace and vspace arguments by
 %% a whee little bit.
 %%
-%% Updated to use flushright environment, which will keep it 
+%% Updated to use flushright environment, which will keep it
 %%
 
 \newcommand\chapteruaf{
 \if@arabic\relax\else\if@chapterone\setcounter{page}{1}\else\relax\fi\fi
 \@chapteronefalse
                     %\if@openright\cleardoublepage\else\clearpage\fi
-			\clearpage
+            \clearpage
                     \thispagestyle{myheadings}%
                     \global\@topnum\z@
                     \@afterindentfalse
                     \secdef\@chapter\@schapteruaf}
 \def\@schapteruaf#1{\if@twocolumn
                    \@topnewpage[\@makeschapterheaduaf{#1}]%
-		   \@afterheading
+           \@afterheading
                  \else
                    \@makeschapterheaduaf{#1}%
                    \@afterheading
@@ -540,11 +540,11 @@
 \def\@makeschapterheaduaf#1{%
   {\parindent \z@ \centering
     \reset@font
-    \normalsize %\bfseries  
-	\textbf{#1}\par
+    \normalsize %\bfseries
+    \textbf{#1}\par
     %\vspace{-18.3pt}
-	%\hspace{143mm} 
-	\begin{flushright}Page\end{flushright}\vspace*{-13.3pt}
+    %\hspace{143mm}
+    \begin{flushright}Page\end{flushright}\vspace*{-13.3pt}
     \nobreak
   }
 }
@@ -598,7 +598,7 @@
     \nobreak
   }}
 
-%% here's the frontchap stuff, TOTALLY the same as a chapter, but with 
+%% here's the frontchap stuff, TOTALLY the same as a chapter, but with
 %% centered chapter title
 \newcommand\frontchap{\if@openright\cleardoublepage\else\clearpage\fi
                     \thispagestyle{myheadings}%
@@ -652,39 +652,39 @@
 
 \newcommand{\appchapter}[1]{\if@openright\cleardoublepage\else\clearpage\fi
                     \thispagestyle{myheadings}%
-	\ifnum \c@secnumdepth >\m@ne
+    \ifnum \c@secnumdepth >\m@ne
                          \refstepcounter{chapter}%
-		 \begin{center} \bfseries Appendix\space\thechapter \\ #1 \end{center}
+         \begin{center} \bfseries Appendix\space\thechapter \\ #1 \end{center}
                           \addcontentsline{loa}{frontchapter}%
                                    {Appendix \protect\numberline{\thechapter}#1}%
         \else
                  \addcontentsline{loa}{frontchapter}{Appendix \protect\numberline{\thechapter}#1}
-	\fi
-	
-	\setcounter{section}{0}
-    	%\begin{center}\normalsize\bfseries
-	%	Appendix \thechapter \\ #1 \end{center}
-	%\addcontentsline{loa}{frontchapter}{Appendix \protect\numberline{\thechapter} #1}
-	%\ifnum \c@secnumdepth >\m@ne
-	%	\stepcounter{chapter}\setcounter{section}{1}
+    \fi
+
+    \setcounter{section}{0}
+        %\begin{center}\normalsize\bfseries
+    %   Appendix \thechapter \\ #1 \end{center}
+    %\addcontentsline{loa}{frontchapter}{Appendix \protect\numberline{\thechapter} #1}
+    %\ifnum \c@secnumdepth >\m@ne
+    %   \stepcounter{chapter}\setcounter{section}{1}
 }
 \newcommand{\appsection}[1]{% addcontents line to loa, not toc; left justified, bold, etc.
-	\refstepcounter{section}
-		\begin{flushleft} \bfseries {\thesection\protect\space\space}#1 \end{flushleft}
-			\addcontentsline{loa}{section}{\protect\numberline{\thesection}#1}
-	\setcounter{subsection}{0}
+    \refstepcounter{section}
+        \begin{flushleft} \bfseries {\thesection\protect\space\space}#1 \end{flushleft}
+            \addcontentsline{loa}{section}{\protect\numberline{\thesection}#1}
+    \setcounter{subsection}{0}
 }
 \newcommand{\appsubsection}[1]{
-	\refstepcounter{subsection}
-	\begin{flushleft} \bfseries {\thesubsection\protect\space\space}#1 \end{flushleft}
-	\addcontentsline{loa}{subsection}{\protect\numberline{\thesubsection} #1}
-	\setcounter{subsubsection}{0}
+    \refstepcounter{subsection}
+    \begin{flushleft} \bfseries {\thesubsection\protect\space\space}#1 \end{flushleft}
+    \addcontentsline{loa}{subsection}{\protect\numberline{\thesubsection} #1}
+    \setcounter{subsubsection}{0}
 }
 \newcommand{\appsubsubsection}[1]{
-	\refstepcounter{subsubsection}
-	\begin{flushleft} \bfseries {\thesubsubsection\protect\space\space}#1 \end{flushleft}
-	\addcontentsline{loa}{subsection}{\protect\numberline{\thesubsubsection} #1}
-	
+    \refstepcounter{subsubsection}
+    \begin{flushleft} \bfseries {\thesubsubsection\protect\space\space}#1 \end{flushleft}
+    \addcontentsline{loa}{subsection}{\protect\numberline{\thesubsubsection} #1}
+
 }
 
 \newcommand\section{\@startsection {section}{1}{\z@}%
@@ -843,7 +843,7 @@
     \@chapteronefalse
     \if@arabic\relax\else\renewcommand{\thepage}{\roman{page}}\fi
   \newpage%\addcontentsline{toc}{chapter}{\contentsname}  %added by LEif
-	
+
     \if@twocolumn
       \@restonecoltrue\onecolumn
     \else
@@ -853,7 +853,7 @@
         \@mkboth{\uppercase{\contentsname}}{\uppercase{\contentsname}}}%
     \@chapteronetrue
     %\cftaftertoctitle
-    \@starttoc{toc} 
+    \@starttoc{toc}
     \if@restonecol\twocolumn\fi
     \newpage\renewcommand{\thepage}{\arabic{page}}}
 
@@ -882,12 +882,12 @@
 %      \leavevmode \bfseries
 %     \advance\leftskip\@tempdima
 %      \hskip -\leftskip
-	\begingroup
-	\bfseries
+    \begingroup
+    \bfseries
       {\@dottedtocline{0}{0.0em}{1.5em}{Chapter #1}{\textbf{#2}}}
-	\endgroup
+    \endgroup
 %#1\nobreak\hfil \nobreak\hbox to\@pnumwidth{\hss #2}\par
-%      \penalty\@highpenalty  
+%      \penalty\@highpenalty
 %    \endgroup
   \fi}
 \newcommand\l@frontchapter[2]{%
@@ -900,12 +900,12 @@
 %      \leavevmode \bfseries
 %     \advance\leftskip\@tempdima
 %      \hskip -\leftskip
-	\begingroup
-	\bfseries
+    \begingroup
+    \bfseries
       {\@dottedtocline{0}{0.0em}{1.5em}{#1}{\textbf{#2}}}
-	\endgroup
+    \endgroup
 %#1\nobreak\hfil \nobreak\hbox to\@pnumwidth{\hss #2}\par
-%      \penalty\@highpenalty  
+%      \penalty\@highpenalty
 %    \endgroup
   \fi}
 \newcommand\l@appendix[2]{%
@@ -918,11 +918,11 @@
 %      \leavevmode \bfseries
 %     \advance\leftskip\@tempdima
 %      \hskip -\leftskip
-	\begingroup
+    \begingroup
       {\@dottedtocline{0}{0.0em}{1.5em}{Appendix #1}{{#2}}}
-	\endgroup
+    \endgroup
 %#1\nobreak\hfil \nobreak\hbox to\@pnumwidth{\hss #2}\par
-%      \penalty\@highpenalty  
+%      \penalty\@highpenalty
 %    \endgroup
   \fi}
 \newcommand\l@section      {\@dottedtocline{1}{1.5em}{2.3em}}
@@ -1007,8 +1007,8 @@
 \bibindent=1.5em
 \newenvironment{thebibliography}[1]
      {\section{\bibname
-	\addcontentsline{toc}{section}{\bibname}        
-	\@mkboth{\uppercase{\bibname}}{\uppercase{\bibname}}}%
+    \addcontentsline{toc}{section}{\bibname}
+    \@mkboth{\uppercase{\bibname}}{\uppercase{\bibname}}}%
       \list{\@biblabel{\arabic{enumiv}}}%
            {\settowidth\labelwidth{\@biblabel{#1}}%
             \leftmargin\labelwidth
@@ -1101,7 +1101,7 @@
 \if@filesw
   \immediate\write\@auxout{\string\bibdata{#1}}\fi
   \@input@{\jobname.bbl}}
-        
+
 
 \newcommand\today{\ifcase\month\or
   January\or February\or March\or April\or May\or June\or
@@ -1127,7 +1127,7 @@
 \oddsidemargin 0.5in   %   Note that \oddsidemargin = \evensidemargin
    \evensidemargin 0.0in
    \marginparwidth 0pt
-\marginparsep 10pt      % Horizontal space between outer margin and 
+\marginparsep 10pt      % Horizontal space between outer margin and
                         % marginal note
 \topmargin 0.0in        %    Nominal distance from top of page to top of
                         %    box containing running head.
@@ -1140,10 +1140,10 @@
 \textheight = 8.5truein
 %\advance\textheight by \topskip
 \textwidth 6.0truein     % Width of text line.
-                         % For two-column mode: 
-\columnsep 10pt          %    Space between columns 
+                         % For two-column mode:
+\columnsep 10pt          %    Space between columns
 \columnseprule 0pt       %    Width of rule between columns.
- 
+
 %% force a raggedbottom here so page numbers at fronts o' chap's don't
 %% spill over bottom margins
 \raggedbottom
