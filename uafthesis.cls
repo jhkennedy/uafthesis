@@ -55,6 +55,7 @@
 \usepackage{afterpage}
 \usepackage[switch]{lineno}
 \usepackage{tocloft}% http://ctan.org/pkg/tocloft
+\usepackage{setspace}
 %\usepackage[nottoc,notlot,notlof,section,numbib]{tocbibind}
 \ProvidesClass{uafthesis}
 %%              [2004/08/17 v4.9 UAF thesis class]
@@ -100,7 +101,7 @@
 \DeclareOption{arabic}{\@arabictrue}
 \DeclareOption{phd}{\@phdtrue}
 %% As of June 2013, UAF theses are Two-sided, opening right. So, these are our default options.
-\ExecuteOptions{11pt,twoside,final,openright}
+\ExecuteOptions{11pt,twoside,final}
 \ProcessOptions
 
 %% too lazy to deconvolve columnar options, so hard-wired to onecolumn!
@@ -183,7 +184,7 @@
     \addcontentsline{toc}{frontchapter}{\titlename}
     \null\vfill
   \begin{center}
-    { {\expandafter\uppercase\expandafter{\@title}} \par}
+    { \doublespacing {\expandafter\uppercase\expandafter{\@title}} \par}
     \bigskip \bigskip \medskip
         A \par
         \medskip
@@ -204,7 +205,7 @@
     {\@author}, {\@prevdegrees} \par
     \bigskip \bigskip
     Fairbanks, Alaska \par
-    \bigskip
+    \bigskip \bigskip
     {\@degreemonth} {\@degreeyear}
   \end{center}
     \vfill\null
@@ -223,7 +224,7 @@
 \addcontentsline{toc}{frontchapter}{\signame}
 
 \begin{center}
-    { \large {\expandafter\uppercase\expandafter{\@title}} \par}
+    { \large \doublespacing {\expandafter\uppercase\expandafter{\@title}} \par}
     \bigskip \bigskip
     By \par
     \bigskip \bigskip
@@ -286,7 +287,7 @@
 \addcontentsline{toc}{frontchapter}{\signame}
 
 \begin{center}
-    { \large {\expandafter\uppercase\expandafter{\@title}} \par}
+    { \large \doublespacing {\expandafter\uppercase\expandafter{\@title}} \par}
     \bigskip \bigskip
     By \par
     \bigskip \bigskip
@@ -295,55 +296,55 @@
 \vspace{.25in}
 \end{center}
 
-\noindent\hspace{.25in}RECOMMENDED:\hspace{.45in}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\hspace{.25in}RECOMMENDED:\hspace{.45in}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1.75ex\relax
 \noindent\hskip2in{\@comone}\relax\vskip1.5ex\relax
-\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1.75ex\relax
 \noindent\hskip2in{\@comtwo}\relax\vskip1.5ex\relax
-\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1.75ex\relax
 \noindent\hskip2in{\@comthree}\relax\vskip1.5ex\relax
 
 \ifnum \@numberofmembers = 3
-\vskip-3ex\relax\noindent\hskip2in\relax{\@commchair}\relax\vskip-1ex\relax
-\noindent\hskip2in\relax Advisory Committee Chair \vskip2.5ex
+\vskip-3ex\relax\noindent\hskip2in\relax{\@commchair}\relax\vskip-1.75ex\relax
+\noindent\hskip2in\relax Advisory Committee Chair \vskip1.5ex
 \fi
 
 \ifnum \@numberofmembers = 4
-\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
-\noindent\hskip2in\relax{\@commchair}\relax\vskip-1ex\relax
-\noindent\hskip2in\relax Advisory Committee Chair \vskip2.5ex
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1.75ex\relax
+\noindent\hskip2in\relax{\@commchair}\relax\vskip-1.75ex\relax
+\noindent\hskip2in\relax Advisory Committee Chair \vskip1.5ex
 \fi
 
 \ifnum \@numberofmembers = 5
-\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1.75ex\relax
 \noindent\hskip2in{\@comfour}\relax\vskip1.5ex\relax
-\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
-\noindent\hskip2in\relax{\@commchair}\relax\vskip-1ex\relax
-\noindent\hskip2in\relax Advisory Committee Chair \vskip2.5ex
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1.75ex\relax
+\noindent\hskip2in\relax{\@commchair}\relax\vskip-1.75ex\relax
+\noindent\hskip2in\relax Advisory Committee Chair \vskip1.5ex
 \fi
 
 \ifnum \@numberofmembers = 6
-\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1.75ex\relax
 \noindent\hskip2in{\@comfour}\relax\vskip1.5ex\relax
-\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1.75ex\relax
 \noindent\hskip2in{\@comfive}\relax\vskip1.5ex\relax
-\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
-\noindent\hskip2in\relax{\@commchair}\relax\vskip-1ex
-\noindent\hskip2in\relax Advisory Committee Chair \vskip2.5ex
+\noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1.75ex\relax
+\noindent\hskip2in\relax{\@commchair}\relax\vskip-1.75ex
+\noindent\hskip2in\relax Advisory Committee Chair \vskip1.5ex
 \fi
 
 \noindent\phantom{\hspace{.25in}RECOMMENDED:\hspace{.45in}}\rule{3.75in}{.05mm}\hspace{.25in}
-\vskip-1ex\relax\noindent\hskip2in\relax{\@depchair}\relax
-\vskip-1ex\relax\noindent\hskip2in\relax Chair, Department of {\@department} \vskip1.5ex
+\vskip-1.75ex\relax\noindent\hskip2in\relax{\@depchair}\relax
+\vskip-1.75ex\relax\noindent\hskip2in\relax Chair, Department of {\@department} \vskip1.5ex
 
 \bigskip \bigskip \par
 
-\noindent\hspace{.25in}APPROVED: \hspace{.8in} \rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
-\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }{\@colldean}\relax\vskip-1ex
+\noindent\hspace{.25in}APPROVED: \hspace{.8in} \rule{3.75in}{.05mm}\hspace{.25in}\vskip-1.75ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }{\@colldean}\relax\vskip-1.75ex
 \noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }Dean, {\@college}\hspace{.25in}\vskip2.5ex\relax
-\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
-\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }{\@gsdean}\relax\vskip-1ex
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1.75ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }{\@gsdean}\relax\vskip-1.75ex
 \noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }Dean of the Graduate School\hspace{.25in}\vskip2.5ex\relax
-\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1ex\relax
+\noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }\rule{3.75in}{.05mm}\hspace{.25in}\vskip-1.75ex\relax
 \noindent\phantom{\hspace{.25in}APPROVED: \hspace{.8in} }Date
 \newpage \thispagestyle{empty}~ % a blank page that serves as the backside of the signature page
 \newpage}
@@ -399,8 +400,8 @@
 \if@twoside
     \def\ps@headings{%
       \let\@oddfoot\@empty\let\@evenfoot\@empty
-      \def\@evenhead{\thepage\hfil\slshape\leftmark}%
-      \def\@oddhead{{\slshape\rightmark}\hfil\thepage}%
+      \def\@evenfoot{\thepage\hfil\slshape\leftmark}%
+      \def\@oddhead{{\slshape\rightmark}\hfil\thepage\hfil}%
       \let\@mkboth\markboth
       \def\chaptermark##1{%
         \markboth {\uppercase{\ifnum \c@secnumdepth >\m@ne
@@ -412,8 +413,8 @@
             ##1}}}}
 \else
     \def\ps@headings{%
-      \let\@oddfoot\@empty
-      \def\@oddhead{{\slshape\rightmark}\hfil\thepage}%
+      %\let\@oddfoot\@empty
+      \def\@oddfoot{{\slshape\rightmark}\hfil\thepage\hfil}%
       \let\@mkboth\markboth
       \def\chaptermark##1{%
         \markright {\uppercase{\ifnum \c@secnumdepth >\m@ne
@@ -421,9 +422,9 @@
             ##1}}}}
 \fi
 \def\ps@myheadings{%
-    \let\@oddfoot\@empty\let\@evenfoot\@empty
-    \def\@evenhead{\thepage\hfil\slshape\leftmark}%
-    \def\@oddhead{{\slshape\rightmark}\hfil\thepage}%
+    %\let\@oddfoot\@empty\let\@evenfoot\@empty
+    \def\@evenfoot{\hfil\thepage\hfil\slshape\leftmark}%
+    \def\@oddfoot{{\slshape\rightmark}\hfil\thepage\hfil}%
     \let\@mkboth\@gobbletwo
     \let\chaptermark\@gobble
     \let\sectionmark\@gobble
@@ -1127,7 +1128,7 @@
 \fi
 
 %% here's where we meet the page layout requirements of the grad school
-\oddsidemargin 0.5in   %   Note that \oddsidemargin = \evensidemargin
+\oddsidemargin 0.0in   %   Note that \oddsidemargin = \evensidemargin
    \evensidemargin 0.0in
    \marginparwidth 0pt
 \marginparsep 10pt      % Horizontal space between outer margin and
@@ -1142,7 +1143,7 @@
                         %    foot to baseline of last line of text.
 \textheight = 8.5truein
 %\advance\textheight by \topskip
-\textwidth 6.0truein     % Width of text line.
+\textwidth 6.5truein     % Width of text line.
                          % For two-column mode:
 \columnsep 10pt          %    Space between columns
 \columnseprule 0pt       %    Width of rule between columns.
